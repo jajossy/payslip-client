@@ -4,30 +4,37 @@ import { Customer } from '../../interface/customer';
 import { MatTableDataSource, MatPaginator} from '@angular/material';
 
 @Component({
-  selector: 'app-owner-list',
-  templateUrl: './owner-list.component.html',
-  styleUrls: ['./owner-list.component.css']
+  selector: 'supplier-list',
+  templateUrl: './supplier.component.html',
+  styleUrls: ['./supplier.component.css']
 })
-export class OwnerListComponent implements OnInit, AfterViewInit {
+export class SupplierComponent implements OnInit {
 
   allCustomer: Customer[];
-
-  /*public displayedColumns = ['CompanyName', 'ContactName', 'ContactTitle', 'Address',
-                              'City', 'Region', 'PostalCode', 'Country', 'Phone', 'Fax']*/
-
+  public array: any;
   public displayedColumns = ['CompanyName', 'ContactName', 'ContactTitle', 'Address', 'Country',
                               'details', 'update', 'delete'];
 
   public dataSource = new MatTableDataSource<Customer>();
+
+  public pageSize = 10;
+  public currentPage = 0;
+  public totalSize = 0;
   
-  //@ViewChild(MatPaginator) paginator: MatPaginator;
-  paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  //paginator: MatPaginator;
 
   constructor(private repoService: RepositoryService) { }
 
   ngOnInit() {
     this.getCustomer();
-  }  
+  }
+  
+  public handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
 
   /*public getAllCustomers = () => {
     this.repoService.getData('api/customer')
@@ -42,16 +49,28 @@ export class OwnerListComponent implements OnInit, AfterViewInit {
     this.repoService.getAllCustomer()
       .subscribe(customer => {
         this.dataSource.data = customer
+        this.dataSource = new MatTableDataSource<Customer>(customer);
+        this.dataSource.paginator = this.paginator;
+        this.array = customer;
+        this.totalSize = this.array.length;
+        this.iterator();
         console.log(customer)
       });
   }
 
-  public doFilter = (value: string) => {
+  private iterator() {
+    const end = (this.currentPage + 1) * this.pageSize;
+    const start = this.currentPage * this.pageSize;
+    const part = this.array.slice(start, end);
+    this.dataSource = part;
+  }
+
+  /*public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
   ngAfterViewInit(): void {    
     this.dataSource.paginator = this.paginator;
-  }
+  }*/
 
 }

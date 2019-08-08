@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { 
   MatTabsModule, MatSidenavModule, MatToolbarModule, MatIconModule,
   MatButtonModule, MatListModule, MatMenuModule, MatTableModule,
-  MatSortModule, MatFormFieldModule, MatInputModule, MatPaginatorModule
+  MatSortModule, MatFormFieldModule, MatInputModule, MatPaginatorModule,
+  MatDatepickerModule, MatNativeDateModule, MatCardModule, MatChipsModule
  } from '@angular/material';
 
 @NgModule({
@@ -20,7 +21,11 @@ import {
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCardModule,
+    MatChipsModule
   ],
   exports: [
     MatTabsModule,
@@ -34,7 +39,11 @@ import {
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCardModule,
+    MatChipsModule
   ],
   declarations: []   
 })

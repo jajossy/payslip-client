@@ -6,8 +6,9 @@ import { HomeComponent } from './home/home.component';
 //import { HeroDetailsComponent } from './hero-details/hero-details.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full'},
-  { path: 'owner', loadChildren: "./owner/owner.module#OwnerModule"},
+  { path: '', redirectTo: '/auth/login', pathMatch: 'full'},
+  { path: 'auth', loadChildren: "./auth/auth.module#AuthModule"},  
+  { path: 'stock', loadChildren: "./stock/stock.module#StockModule"},
   { path: 'home', component: HomeComponent}  
   //{ path: 'dashboard', component: DashboardComponent },
   //{ path: 'detail/:id', component: HeroDetailsComponent}

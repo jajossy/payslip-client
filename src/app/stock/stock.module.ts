@@ -1,19 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { OwnerRoutingModule } from './owner-routing.module';
+import { StockRoutingModule } from './stock-routing.module';
 import { MaterialModule } from './../material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { OwnerListComponent } from './owner-list/owner-list.component';
+import { SupplierComponent } from './supplier/supplier.component';
+import { StockComponent } from './stock.component';
 
 @NgModule({
-  declarations: [OwnerListComponent],
+  declarations: [SupplierComponent,
+                StockComponent],
   imports: [
     CommonModule,
-    OwnerRoutingModule, 
+    StockRoutingModule, 
     MaterialModule,
     FlexLayoutModule
   ]
 })
-export class OwnerModule { }
+export class StockModule { }

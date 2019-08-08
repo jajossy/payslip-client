@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { OwnerListComponent } from './owner-list/owner-list.component';
+import { LoginComponent } from './login/login.component';
 
-const routes: Routes = [
-  { path: 'owners', component: OwnerListComponent }
+const routes: Routes = [  
+  { path: 'login', component: LoginComponent }
 ];
 
 @NgModule({  
@@ -17,4 +17,4 @@ const routes: Routes = [
   ],
   declarations: []
 })
-export class OwnerRoutingModule { }
+export class AuthRoutingModule { }
