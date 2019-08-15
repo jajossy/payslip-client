@@ -1,0 +1,182 @@
+<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
+    <mat-card fxFlex="300px" fxFlex.xs="100%">
+        <mat-card-title>Enter Supplier Information</mat-card-title>
+        <form [formGroup]="supplierForm" autocomplete="off" novalidate 
+            (ngSubmit)="addSupplier(supplierForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+            fxLayoutGap="10px">
+            <mat-card-content>
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Company Name" 
+                    formControlName="CompanyName" id="companyname">
+                    <mat-error *ngIf="hasError('CompanyName', 'required')">
+                        Company Name is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Contact Name" 
+                    formControlName="ContactName" id="contactname">
+                    <mat-error *ngIf="hasError('ContactName', 'required')">
+                        Contact Name is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Contact Title" 
+                    formControlName="ContactTitle" id="contacttitle">
+                    <mat-error *ngIf="hasError('ContactTitle', 'required')">
+                        Contact Title is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Address" 
+                    formControlName="Address" id="address">
+                    <mat-error *ngIf="hasError('Address', 'required')">                        
+                        Address is required
+                    </mat-error>
+                    <mat-error *ngIf="hasError('Address', 'maxlength')">                        
+                        Address should not be more than 100 characters
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Country</mat-label>
+                    <mat-select placeholder="Choose Country" formControlName="CountryId" [(ngModel)]="CountryId"
+                    (selectionChange)="fillState(CountryId)">                      
+                      <mat-option *ngFor="let count of countries" [value]="count.id">{{count.Description}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label>State</mat-label>
+                    <mat-select placeholder="Choose State" formControlName="StateId" [(ngModel)]="StateId">                      
+                      <mat-option *ngFor="let stat of states" [value]="stat.id">{{stat.Description}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Region" 
+                    formControlName="Region" id="region">
+                    <mat-error *ngIf="hasError('Region', 'required')">                        
+                        Region is required
+                    </mat-error>                    
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Phone" 
+                    formControlName="Phone" id="phone">
+                    <mat-error *ngIf="hasError('Phone', 'required')">                        
+                        Phone is required
+                    </mat-error>                    
+                </mat-form-field>
+
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" [disabled]="!supplierForm.valid">Add Supplier</button>
+            </mat-card-actions>
+        </form>        
+    </mat-card>
+
+    <mat-card fxFlex="700px" fxFlex.xs="100%">
+        <mat-card-title>Supplier List</mat-card-title>
+        <mat-card-content>
+            <div fxLayout fxLayoutAlign="center center">
+                <mat-form-field fxFlex="40%">
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <table mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="CompanyName">
+                      <th mat-header-cell *matHeaderCellDef> Company Name </th>
+                      <td mat-cell *matCellDef="let element"> {{element.CompanyName}} </td>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="ContactName">
+                        <th mat-header-cell *matHeaderCellDef> Contact Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.ContactName}} </td>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="ContactTitle">
+                        <th mat-header-cell *matHeaderCellDef> Contact Title </th>
+                        <td mat-cell *matCellDef="let element"> {{element.ContactTitle}} </td>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="Address">
+                        <th mat-header-cell *matHeaderCellDef> Address </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Address}} </td>
+                    </ng-container>
+            
+                    <!-- <ng-container matColumnDef="City">
+                        <th mat-header-cell *matHeaderCellDef> City </th>
+                        <td mat-cell *matCellDef="let element"> {{element.City}} </td>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="Region">
+                        <th mat-header-cell *matHeaderCellDef> Region </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Region}} </td>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="PostalCode">
+                        <th mat-header-cell *matHeaderCellDef> PostalCode </th>
+                        <td mat-cell *matCellDef="let element"> {{element.PostalCode}} </td>
+                    </ng-container> -->
+            
+                    <ng-container matColumnDef="Country"> 
+                        <th mat-header-cell *matHeaderCellDef> Country </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Country}} </td>
+                    </ng-container>
+            
+                    <!-- <ng-container matColumnDef="Phone">
+                        <th mat-header-cell *matHeaderCellDef> Phone </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Phone}} </td>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="Fax">
+                        <th mat-header-cell *matHeaderCellDef> Fax </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Fax}} </td>
+                    </ng-container> -->
+                   
+                    <!-- <ng-container matColumnDef="dateOfBirth">
+                      <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
+                      <td mat-cell *matCellDef="let element"> {{element.dateOfBirth | date}} </td>
+                    </ng-container> -->       
+                   
+                    <ng-container matColumnDef="details">
+                      <th mat-header-cell *matHeaderCellDef> Details </th>
+                      <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="primary" (click)="redirectToDetails(element.CustomerID)">
+                            <mat-icon class="mat-18">reorder</mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+                   
+                    <ng-container matColumnDef="update">
+                        <th mat-header-cell *matHeaderCellDef> Update </th>
+                        <td mat-cell *matCellDef="let element">
+                          <button mat-icon-button color="accent" (click)="redirectToUpdate(element.CustomerID)">
+                              <mat-icon class="mat-18">system_update</mat-icon>
+                          </button>
+                        </td>
+                      </ng-container>
+                   
+                      <ng-container matColumnDef="delete">
+                          <th mat-header-cell *matHeaderCellDef> Delete </th>
+                          <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="warn" (click)="redirectToDelete(element.CustomerID)">
+                                <mat-icon class="mat-18">delete</mat-icon>
+                            </button>
+                          </td>
+                        </ng-container>
+                   
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                      [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                  </mat-paginator>
+            
+        </mat-card-content>      
+    </mat-card>     
+    
+</section>

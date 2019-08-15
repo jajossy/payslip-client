@@ -3,34 +3,59 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from './../environments/environment'
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Customer } from './interface/customer';
+
+
+
+const httpOptions = {
+  headers: new HttpHeaders({'Content-Type': 'application/json'})
+}; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class RepositoryService {
 
-  url = 'http://localhost:50029/api/customer';  
-
   constructor(private http: HttpClient) { }
 
-  getAllCustomer(): Observable<Customer[]>{
-    return this.http.get<Customer[]>(this.url);
+  GetAll(method: string): Observable<any> {
+    return this.http.get(`${environment.urlAddress}/${method}`)
+      .pipe(
+        tap(_ => console.log('fetched')),
+        catchError(this.handleError('get request', []))
+      );
   }
 
-  /*public getData = (route: string) => {
-    return this.http.get(this.createCompleteRoute(route, environment.urlAddress));
+  GetByUnique(id: string, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}/${id}`;
+    return this.http.get<any>(url).pipe(
+      tap(_ => console.log(`fetched id=${id}`)),
+      catchError(this.handleError<any>(`get id=${id}`))
+    );
   }
 
-  private createCompleteRoute = (route: string, envAddress: string) => {
-    return `${envAddress}/${route}`;
+  GetByid(id: number, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}/${id}`;
+    return this.http.get<any>(url).pipe(
+      tap(_ => console.log(`fetched id=${id}`)),
+      catchError(this.handleError<any>(`get id=${id}`))
+    );
   }
 
-  private generateHeaders = () => {
-    return {
-      headers: new HttpHeaders({'Content-Type': 'application/json'})
-    }
-  }*/
+  POST (model: object, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}`;
+    return this.http.post<any>(url, model, httpOptions).pipe(
+      tap((product: object) => console.log(`added model`)),
+      catchError(this.handleError<object>('add model'))
+    );
+  }
+
+  deleteProduct (id: string): Observable<any> {
+    const url = `${environment.urlAddress}/${id}`;  
+    return this.http.delete<any>(url, httpOptions).pipe(
+      tap(_ => console.log(`deleted id=${id}`)),
+      catchError(this.handleError<any>('delete'))
+    );
+  }
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

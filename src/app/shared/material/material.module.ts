@@ -4,8 +4,10 @@ import {
   MatTabsModule, MatSidenavModule, MatToolbarModule, MatIconModule,
   MatButtonModule, MatListModule, MatMenuModule, MatTableModule,
   MatSortModule, MatFormFieldModule, MatInputModule, MatPaginatorModule,
-  MatDatepickerModule, MatNativeDateModule, MatCardModule, MatChipsModule
+  MatDatepickerModule, MatNativeDateModule, MatCardModule, MatChipsModule,
+  MatOptionModule, MatSelectModule, MatDialogModule
  } from '@angular/material';
+ import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   imports: [
@@ -25,7 +27,11 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     MatCardModule,
-    MatChipsModule
+    MatChipsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatProgressBarModule,
+    MatDialogModule
   ],
   exports: [
     MatTabsModule,
@@ -43,7 +49,11 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     MatCardModule,
-    MatChipsModule
+    MatChipsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatProgressBarModule,
+    MatDialogModule
   ],
   declarations: []   
 })

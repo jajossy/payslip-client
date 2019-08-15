@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { MaterialModule } from './material/material.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { SharedModule } from './shared/shared.module';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CustomHttpInterceptor } from './http-interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -25,12 +25,15 @@ import { NavigationComponent } from './navigation/navigation.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
-    FlexLayoutModule,
+    SharedModule,
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: CustomHttpInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

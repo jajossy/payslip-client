@@ -1,0 +1,11 @@
+<section fxLayout="column" fxLayoutAlign="center center">
+    <h1 mat-dialog-title>Successful!</h1>
+    <mat-dialog-content>
+        <P>{{data.message}}</P>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <!-- <button mat-raised-button color="primary" [mat-dialog-close]="true">OK</button> -->
+        <button mat-raised-button color="primary" (click)="closeDialog()">OK</button>
+    </mat-dialog-actions>
+</section>
+
