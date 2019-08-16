@@ -5,7 +5,6 @@ import { RepositoryService } from './../../repository.service';
 import { ProgressService } from './../../progress.service';
 import { MatTableDataSource, MatPaginator, MatDialog} from '@angular/material';
 import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/success-dialog.component';
-import { ErrorDialogComponent } from '../../shared/dialogs/error-dialog/error-dialog.component';
 
 
 @Component({

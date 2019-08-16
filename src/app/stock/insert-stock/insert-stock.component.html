@@ -1,98 +1,72 @@
-<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">    
+<section>    
 
-    <mat-card fxFlex="700px" fxFlex.xs="100%">
+    <mat-card>
         <mat-card-title>Add Stock Up to Inventory</mat-card-title>
         <mat-card-content>
-            <div fxLayout fxLayoutAlign="center center">
-                <mat-form-field fxFlex="40%">
+            <div class="example-header" fxLayout="row">
+                <mat-form-field>
                     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field>
             </div>
-            <table mat-table [dataSource]="dataSource" matSort>
+            <div class="example-container mat-elevation-z8">
+                <mat-table [dataSource]="dataSource" matSort >
                     <ng-container matColumnDef="StockName">
-                      <th mat-header-cell *matHeaderCellDef> Product Name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.CompanyStockTag.Stockname}} </td>
+                      <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="product name"> {{element.CompanyStockTag.Stockname}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="SupplierName">
-                        <th mat-header-cell *matHeaderCellDef> Supplier Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.Supplier.CompanyName}} </td>
+                        <mat-header-cell *matHeaderCellDef> Supplier Name </mat-header-cell>>
+                        <mat-cell *matCellDef="let element" data-label="supplier name"> {{element.Supplier.CompanyName}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="SupliedPrice">
-                        <th mat-header-cell *matHeaderCellDef> Supplied Price </th>
-                        <td mat-cell *matCellDef="let element"> {{element.SuppliedPrice | number: '1.2-2'}} </td>
+                        <mat-header-cell *matHeaderCellDef> Supplied Price </mat-header-cell>>
+                        <mat-cell *matCellDef="let element" data-label="supplied price"> {{element.SuppliedPrice | number: '1.2-2'}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="UnitPrice">
-                        <th mat-header-cell *matHeaderCellDef> Unit Price </th>
-                        <td mat-cell *matCellDef="let element"> {{element.UnitPrice | number: '1.2-2'}} </td>
-                    </ng-container>            
-                    
+                        <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>>
+                        <mat-cell *matCellDef="let element" data-label="unit price"> {{element.UnitPrice | number: '1.2-2'}} </mat-cell>
+                    </ng-container>                   
             
                     <ng-container matColumnDef="QuantitySupplied">
-                        <th mat-header-cell *matHeaderCellDef> Quantity Supplied </th>
-                        <td mat-cell *matCellDef="let element"> {{element.QuantitySupplied}} </td>
+                        <mat-header-cell *matHeaderCellDef> Quantity Supplied </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="quantity supplied"> {{element.QuantitySupplied}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="DateSupplied">
-                        <th mat-header-cell *matHeaderCellDef> Date Supplied </th>
-                        <td mat-cell *matCellDef="let element"> {{element.DateSupplied | date}} </td>
+                        <mat-header-cell *matHeaderCellDef> Date Supplied </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="date supplied"> {{element.DateSupplied | date}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="PackUnit"> 
-                        <th mat-header-cell *matHeaderCellDef> Pack Unit </th>
-                        <td mat-cell *matCellDef="let element"> {{element.PackUnit}} </td>
+                        <mat-header-cell *matHeaderCellDef> Pack Unit </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="unit pack"> {{element.PackUnit}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="BatchNo">
-                        <th mat-header-cell *matHeaderCellDef> BatchNo </th>
-                        <td mat-cell *matCellDef="let element"> {{element.BatchNo}} </td>
-                    </ng-container>
-            
-                    <!-- <ng-container matColumnDef="Fax">
-                        <th mat-header-cell *matHeaderCellDef> Fax </th>
-                        <td mat-cell *matCellDef="let element"> {{element.Fax}} </td>
-                    </ng-container> -->
+                        <mat-header-cell *matHeaderCellDef> BatchNo </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="batch no"> {{element.BatchNo}} </mat-cell>
+                    </ng-container>                        
                    
-                    <!-- <ng-container matColumnDef="dateOfBirth">
-                      <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
-                      <td mat-cell *matCellDef="let element"> {{element.dateOfBirth | date}} </td>
-                    </ng-container> -->       
-                   
-                    <ng-container matColumnDef="details">
-                      <th mat-header-cell *matHeaderCellDef> Details </th>
-                      <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button color="primary" (click)="redirectToDetails(element.CustomerID)">
-                            <mat-icon class="mat-18">reorder</mat-icon>
+                    <ng-container matColumnDef="addInventory">
+                      <mat-header-cell *matHeaderCellDef> Add Stock </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="add to inventory">
+                        <button mat-icon-button color="primary" (click)="prepToAddStock(element)">
+                            <mat-icon class="mat-18">add_shopping_cart</mat-icon>
                         </button>
-                      </td>
-                    </ng-container>
+                      </mat-cell>
+                    </ng-container>                  
+                    
                    
-                    <ng-container matColumnDef="update">
-                        <th mat-header-cell *matHeaderCellDef> Update </th>
-                        <td mat-cell *matCellDef="let element">
-                          <button mat-icon-button color="accent" (click)="redirectToUpdate(element.CustomerID)">
-                              <mat-icon class="mat-18">system_update</mat-icon>
-                          </button>
-                        </td>
-                      </ng-container>
-                   
-                      <ng-container matColumnDef="delete">
-                          <th mat-header-cell *matHeaderCellDef> Delete </th>
-                          <td mat-cell *matCellDef="let element">
-                            <button mat-icon-button color="warn" (click)="redirectToDelete(element.CustomerID)">
-                                <mat-icon class="mat-18">delete</mat-icon>
-                            </button>
-                          </td>
-                        </ng-container>
-                   
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                  </table>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  </mat-table>
                   <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
                       [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
                   </mat-paginator>
+                </div>
             
         </mat-card-content>      
     </mat-card>     
