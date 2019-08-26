@@ -11,6 +11,7 @@ import { AddSupplierComponent } from './add-supplier/add-supplier.component';
 import { StockTagComponent } from './stock-tag/stock-tag.component';
 import { StockInComponent } from './stock-in/stock-in.component';
 import { InsertStockComponent } from './insert-stock/insert-stock.component';
+import { CurrentStockComponent } from './current-stock/current-stock.component';
 
 @NgModule({
   declarations: [SupplierComponent,
@@ -18,7 +19,8 @@ import { InsertStockComponent } from './insert-stock/insert-stock.component';
                 AddSupplierComponent,
                 StockTagComponent,
                 StockInComponent,
-                InsertStockComponent],
+                InsertStockComponent,
+                CurrentStockComponent],
   imports: [
     CommonModule,
     StockRoutingModule, 

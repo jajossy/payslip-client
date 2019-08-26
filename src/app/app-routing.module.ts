@@ -9,6 +9,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full'},
   { path: 'auth', loadChildren: "./auth/auth.module#AuthModule"},  
   { path: 'stock', loadChildren: "./stock/stock.module#StockModule"},
+  { path: 'register', loadChildren: "./register/register.module#RegisterModule"},
+  { path: 'transaction', loadChildren: "./transaction/transaction.module#TransactionModule"},
   { path: 'home', component: HomeComponent}  
   //{ path: 'dashboard', component: DashboardComponent },
   //{ path: 'detail/:id', component: HeroDetailsComponent}

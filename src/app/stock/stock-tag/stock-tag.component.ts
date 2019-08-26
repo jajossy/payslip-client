@@ -78,6 +78,8 @@ export class StockTagComponent implements OnInit {
         .subscribe(result => {
           console.log("closed");
         });
+        // reload Tag
+        this.getCompanyTag();
       });
     }    
   }

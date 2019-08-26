@@ -49,7 +49,19 @@ export class RepositoryService {
     );
   }
 
-  deleteProduct (id: string): Observable<any> {
+  UPDATE (model: object, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}`;
+    return this.http.put<any>(url, model, httpOptions).pipe(
+      tap((product: object) => console.log(`updated model`)),
+      catchError(this.handleError<object>('update model'))
+    );
+  }
+
+  /*UPDATE (id: number, value: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, value);
+  }*/
+
+  DELETE (id: string): Observable<any> {
     const url = `${environment.urlAddress}/${id}`;  
     return this.http.delete<any>(url, httpOptions).pipe(
       tap(_ => console.log(`deleted id=${id}`)),

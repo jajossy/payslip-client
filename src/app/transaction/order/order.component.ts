@@ -1,0 +1,197 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { CurrentStock } from '../../interface/currentstock';
+import { Order } from '../../interface/order';
+import { OrderItem } from '../../interface/orderitem';
+import { Customer } from '../../interface/customer';
+
+import { RepositoryService } from './../../repository.service';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatTable} from '@angular/material';
+import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/success-dialog.component';
+import { ErrorDialogComponent } from '../../shared/dialogs/error-dialog/error-dialog.component';
+import { InputDialogComponent } from '../../shared/dialogs/input-dialog/input-dialog.component';
+import { ProgressService } from './../../progress.service';
+
+
+@Component({
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.css']
+})
+export class OrderComponent implements OnInit {
+  showProgress: boolean;
+
+  // form varaibles
+  public salesForm: FormGroup;
+
+  order: Order[];
+  orderItem: OrderItem[] = [];
+  allCustomer: Customer[];
+  //orderItem: Observable<OrderItem[]>;
+  
+  currentStock: CurrentStock[];
+  CustomerId : string;
+  TotalOrderAmount : number = 0;
+  GenderId: string;
+  totalPrice: number = 0
+
+  public array: any;
+  public displayedColumns = ['Product',
+                            'Quantity',
+                            'SalesUnitPrice',
+                            'SalesTotalAmount',
+                            'action'                            
+                              ]
+  public dataSource =  this.orderItem;
+  paymentType : payment[] = [
+    { 'id' : 1, 'Description': 'Cash'},
+    { 'id' : 2, 'Description': 'Cheque'},
+  ]
+  @ViewChild(MatTable, {static: false}) table: MatTable<any>;
+
+  constructor(private repoService: RepositoryService, private dialog: MatDialog,
+              private progressService: ProgressService) { }
+
+  ngOnInit() {  
+    this.initializeForm();  
+    this.getCurrent();
+    this.getCustomer();  
+  } 
+  
+  initializeForm(){
+    this.salesForm = new FormGroup({      
+      CustomerId: new FormControl('', [Validators.required]),
+      TotalOrderAmount: new FormControl('', [Validators.required]),
+      PaymentType: new FormControl('', [Validators.required]),
+      /*Surname: new FormControl(''),
+      Firstname: new FormControl(''),
+      Othernames: new FormControl(''),
+      GenderId: new FormControl(''),
+      PhoneNo: new FormControl(''),
+      CustomerEmail: new FormControl(''),
+      Remark: new FormControl(''),    
+      CountryId: new FormControl(''),
+      StateId: new FormControl('')*/
+    });   
+        
+  }
+
+  
+  getCurrent(){
+    this.repoService.GetAll("api/CurrentStock/Get")
+    .subscribe(current => {
+      this.currentStock = current;            
+      console.log(current)
+    });
+  } 
+
+  
+  
+  addToCart(stock){
+    console.log(stock); 
+    console.log(this.dataSource);
+    var check = this.dataSource.filter(x => x.ProductId === stock.CompanyStockTag.id)
+    console.log(check);
+    if(check.length == 0)  
+    {      
+      this.dataSource.push({      
+        id : 	'',
+        ProductId : stock.CompanyStockTag.id,
+        Quantity : 0,
+        SalesUnitPrice : stock.CompanyUnitPrice,
+        SalesTotalAmount : 0,
+        OrderId : '',
+        BatchNo : '',
+        SuppliedUnitPrice: stock.SupplierUnitPrice,
+        SuppliedTotalPrice : 0,
+        CompanyStockTag : stock.CompanyStockTag
+      });
+      console.log(this.dataSource);
+      this.table.renderRows();
+      //this.getOrderItem();
+    }
+    else if(check.length > 0)
+    {
+      let dialogRef = this.dialog.open(ErrorDialogComponent, {
+        width: '250px',
+        disableClose: true,
+        data: {message: "Product exist already in cart"}
+      });
+      dialogRef.afterClosed()
+      .subscribe(result => {
+        console.log("closed");
+      });
+    }
+    
+  }
+
+  /*public handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
+
+  private iterator() {
+    const end = (this.currentPage + 1) * this.pageSize;
+    const start = this.currentPage * this.pageSize;
+    const part = this.array.slice(start, end);
+    this.dataSource = part;
+  }*/
+
+  openDialog(action, obj) {
+    console.log(obj);
+    obj.action = action;
+    const dialogRef = this.dialog.open(InputDialogComponent, {
+      width: '250px',
+      data:obj
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.event == 'Update'){
+        this.updateRowData(result.data);
+      }else if(result.event == 'Delete'){
+        this.deleteRowData(result.data);
+      }
+    });
+  }
+
+  updateRowData(row_obj){
+    this.dataSource = this.dataSource.filter((value,key)=>{
+      if(value.ProductId == row_obj.ProductId){
+        value.Quantity = row_obj.Quantity;
+        var total : number = value.Quantity * value.SalesUnitPrice;
+        value.SalesTotalAmount = total;
+      }
+      // add up all total prices together 
+      console.log(this.dataSource);          
+      this.dataSource.forEach(y => {
+        console.log(y.SalesTotalAmount);
+        this.totalPrice += y.SalesTotalAmount;        
+      })
+      this.TotalOrderAmount = this.totalPrice;
+
+      return true;
+    });
+  }
+  deleteRowData(row_obj){
+    this.dataSource = this.dataSource.filter((value,key)=>{      
+      return value.ProductId != row_obj.ProductId;      
+    });
+    console.log(this.dataSource);
+  }
+
+  public getCustomer(): void {    
+    this.repoService.GetAll("api/Customer/Get")
+      .subscribe(customer => {
+        this.allCustomer = customer;
+        console.log(customer)
+      });
+  }
+
+}
+
+export interface payment {
+  id: number;
+  Description: string;
+}

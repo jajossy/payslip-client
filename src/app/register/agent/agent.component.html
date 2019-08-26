@@ -1,0 +1,156 @@
+<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
+        <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+    <mat-card fxFlex="100%" fxFlex.xs="100%">
+            <mat-card-title>Add Field Agents -  Enter and list all Agents</mat-card-title>
+            <mat-card-content>
+                <mat-tab-group>
+                    <mat-tab label="Enter Agent Information"> 
+                            <mat-card fxFlex="300px" fxFlex.xs="100%">
+                                    <mat-card-title>Enter Agent Information</mat-card-title>
+                                    <form [formGroup]="agentForm" autocomplete="off" novalidate 
+                                        (ngSubmit)="addAgent(agentForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+                                        fxLayoutGap="10px">
+                                        <mat-card-content>
+                                            <mat-form-field>
+                                                <input matInput type="text" placeholder="Surname" 
+                                                formControlName="Surname" id="surname">
+                                                <mat-error *ngIf="hasError('Surname', 'required')">
+                                                    Surname is required
+                                                </mat-error>
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <input matInput type="text" placeholder="Firstname" 
+                                                formControlName="Firstname" id="firstname">
+                                                <mat-error *ngIf="hasError('Firstname', 'required')">
+                                                    Firstname is required
+                                                </mat-error>
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <input matInput type="text" placeholder="Othernames" 
+                                                formControlName="Othernames" id="othernames">                                                
+                                            </mat-form-field>
+
+                                            <mat-form-field>
+                                                <mat-label>Gender</mat-label>
+                                                <mat-select placeholder="Choose Gender" formControlName="GenderId" [(ngModel)]="GenderId">                      
+                                                <mat-option *ngFor="let gen of gender" [value]="gen.id">{{gen.Description}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <mat-label>Allocated Zone</mat-label>
+                                                <input matInput type="text" placeholder="Allocated Zone" 
+                                                formControlName="AllocatedZone" id="allocatedZone">                                                
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <mat-label>Country</mat-label>
+                                                <mat-select placeholder="Choose Country" formControlName="CountryId" [(ngModel)]="CountryId"
+                                                (selectionChange)="fillState(CountryId)">                      
+                                                <mat-option *ngFor="let count of countries" [value]="count.id">{{count.Description}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <mat-label>State</mat-label>
+                                                <mat-select placeholder="Choose State" formControlName="StateId" [(ngModel)]="StateId">                      
+                                                <mat-option *ngFor="let stat of states" [value]="stat.id">{{stat.Description}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            
+                                            <mat-form-field>
+                                                <mat-label>Remark</mat-label>
+                                                <input matInput type="text" placeholder="Remark" 
+                                                formControlName="Remark" id="remark">                                                
+                                            </mat-form-field>
+                                            
+                            
+                                        </mat-card-content>
+                                        <mat-card-actions>
+                                            <button mat-raised-button color="primary" [disabled]="!agentForm.valid">Add Agent</button>
+                                        </mat-card-actions>
+                                    </form>        
+                                </mat-card> 
+                    </mat-tab>
+                    <mat-tab label="Agent List">
+                            <mat-card fxFlex="700px" fxFlex.xs="100%">
+                                    <mat-card-title>List of Agents</mat-card-title>
+                                    <mat-card-content>
+                                        <div fxLayout fxLayoutAlign="center center">
+                                            <mat-form-field fxFlex="40%">
+                                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                            </mat-form-field>
+                                        </div>
+                                        <table mat-table [dataSource]="dataSource" matSort>
+                                                <ng-container matColumnDef="Surname">
+                                                <th mat-header-cell *matHeaderCellDef> Surname </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Surname}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="Firstname">
+                                                    <th mat-header-cell *matHeaderCellDef> Firstname </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.Firstname}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="Othernames">
+                                                    <th mat-header-cell *matHeaderCellDef>Othernames</th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.Othernames}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="AllocatedZone">
+                                                    <th mat-header-cell *matHeaderCellDef> Allocated Zone </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.AllocatedZone}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="Country"> 
+                                                    <th mat-header-cell *matHeaderCellDef> Country </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.Country}} </td>
+                                                </ng-container>                                      
+                                            
+                                                <ng-container matColumnDef="details">
+                                                <th mat-header-cell *matHeaderCellDef> Details </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <button mat-icon-button color="primary" (click)="redirectToDetails(element.CustomerID)">
+                                                        <mat-icon class="mat-18">reorder</mat-icon>
+                                                    </button>
+                                                </td>
+                                                </ng-container>
+                                            
+                                                <ng-container matColumnDef="update">
+                                                    <th mat-header-cell *matHeaderCellDef> Update </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                    <button mat-icon-button color="accent" (click)="redirectToUpdate(element.CustomerID)">
+                                                        <mat-icon class="mat-18">system_update</mat-icon>
+                                                    </button>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <ng-container matColumnDef="delete">
+                                                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        <button mat-icon-button color="warn" (click)="redirectToDelete(element.CustomerID)">
+                                                            <mat-icon class="mat-18">delete</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                    </ng-container>
+                                            
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                            </table>
+                                            <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                                                [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                                            </mat-paginator>
+                                        
+                                    </mat-card-content>      
+                                </mat-card>
+                        </mat-tab>
+                    <mat-tab label="">
+                        <p></p>
+                        </mat-tab>
+                </mat-tab-group>
+        </mat-card-content>
+    </mat-card>         
+    
+</section>

@@ -7,6 +7,7 @@ import { AddSupplierComponent } from './add-supplier/add-supplier.component';
 import { StockTagComponent } from './stock-tag/stock-tag.component';
 import { StockInComponent } from './stock-in/stock-in.component';
 import { InsertStockComponent } from './insert-stock/insert-stock.component';
+import { CurrentStockComponent } from './current-stock/current-stock.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full'},
@@ -15,7 +16,8 @@ const routes: Routes = [
     { path: 'addsupplier', component: AddSupplierComponent },
     { path: 'stocktag', component: StockTagComponent },
     { path: 'stockin', component: StockInComponent },
-    { path: 'insertstock', component: InsertStockComponent }
+    { path: 'insertstock', component: InsertStockComponent },
+    { path: 'currentstock', component: CurrentStockComponent }
   ] }
 ];
 

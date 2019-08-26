@@ -5,15 +5,18 @@
     <a mat-list-item routerLink="/stock/stock" (click)="onSidenavClose()">
         <mat-icon>shopping_cart</mat-icon><span class="nav-caption">Stock</span>
     </a>
-    <a mat-list-item routerLink="#" (click)="onSidenavClose()">
-        <mat-icon>account_balance</mat-icon><span class="nav-caption">Take Order</span>
+    <a mat-list-item routerLink="/transaction/transaction" (click)="onSidenavClose()">
+        <mat-icon>motorcycle</mat-icon><span class="nav-caption">Transactions</span>
     </a>
     <a mat-list-item routerLink="#" (click)="onSidenavClose()">
-        <mat-icon>account_balance</mat-icon><span class="nav-caption">Approve Order</span>
+        <mat-icon>find_replace</mat-icon><span class="nav-caption">Approve Order</span>
     </a>
     <a mat-list-item routerLink="#" (click)="onSidenavClose()">
-        <mat-icon>account_balance</mat-icon><span class="nav-caption">Reports</span>
+        <mat-icon>print</mat-icon><span class="nav-caption">Reports</span>
     </a>
+    <a mat-list-item routerLink="/register/register" (click)="onSidenavClose()">
+            <mat-icon>perm_identity</mat-icon><span class="nav-caption">Register</span>
+        </a>
     <a mat-list-item routerLink="/" (click)="onSidenavClose()">
         <mat-icon>logout</mat-icon><span class="nav-caption">Logout</span>
     </a>

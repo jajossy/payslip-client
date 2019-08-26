@@ -8,6 +8,8 @@ import {
   MatOptionModule, MatSelectModule, MatDialogModule
  } from '@angular/material';
  import {MatProgressBarModule} from '@angular/material/progress-bar';
+ import {MatDividerModule} from '@angular/material/divider';
+ import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   imports: [
@@ -31,7 +33,8 @@ import {
     MatOptionModule,
     MatSelectModule,
     MatProgressBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDividerModule    
   ],
   exports: [
     MatTabsModule,
@@ -53,7 +56,8 @@ import {
     MatOptionModule,
     MatSelectModule,
     MatProgressBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDividerModule    
   ],
   declarations: []   
 })

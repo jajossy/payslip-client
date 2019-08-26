@@ -1,3 +1,6 @@
+import { CompanyStockTag } from '../interface/companystocktag';
+import { Supplier } from '../interface/supplier';
+
 export interface StockIn {
     id : string;
     CompanyProductNameId : string;
@@ -11,4 +14,6 @@ export interface StockIn {
     BatchNo? : string;
     CreatedUser? : string;
     CreatedDate	: Date;
+    CompanyStockTag: CompanyStockTag;
+    Supplier: Supplier;
 }

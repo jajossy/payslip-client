@@ -4,7 +4,9 @@ import { Country } from '../../interface/country';
 import { State } from '../../interface/state';
 import { Supplier } from '../../interface/supplier';
 import { RepositoryService } from './../../repository.service';
-import { MatTableDataSource, MatPaginator} from '@angular/material';
+import { ProgressService } from './../../progress.service';
+import { MatTableDataSource, MatPaginator, MatDialog} from '@angular/material';
+import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-add-supplier',
@@ -14,6 +16,7 @@ import { MatTableDataSource, MatPaginator} from '@angular/material';
 export class AddSupplierComponent implements OnInit {
   // form varaibles
   public supplierForm: FormGroup;
+  saveForm : boolean = true;
   countries: Country[];
   states: State[];
   CountryId : number;
@@ -37,7 +40,9 @@ export class AddSupplierComponent implements OnInit {
   }
  
 
-  constructor(private repoService: RepositoryService) { }
+  constructor(private repoService: RepositoryService,
+              private progressService: ProgressService,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     this.initializeForm();
@@ -84,11 +89,23 @@ export class AddSupplierComponent implements OnInit {
   }
 
   public addSupplier(supplierFormValue){
+    
     console.log(supplierFormValue);
     if(this.supplierForm.valid){
       this.repoService.POST(supplierFormValue, `api/Supplier/Post`)
       .subscribe(res => {                 
         console.log(res)
+          let dialogRef = this.dialog.open(SuccessDialogComponent, {
+            width: '250px',
+            disableClose: true,
+            data: {message: "Supplier Successfully saved"}
+          });
+          dialogRef.afterClosed()
+          .subscribe(result => {
+            console.log("closed");
+            this.saveForm = false;
+          });
+          this.getSupplier();
       });
     }    
   }
