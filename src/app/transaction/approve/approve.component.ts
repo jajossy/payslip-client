@@ -1,11 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Country } from '../../interface/country';
-import { State } from '../../interface/state';
-import { Customer } from '../../interface/customer';
+import { Order } from '../../interface/order';
 import { RepositoryService } from './../../repository.service';
-import { MatTableDataSource, MatPaginator} from '@angular/material';
-import { Gender } from '../../interface/gender';
+import { ProgressService } from './../../progress.service';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
 
 
 @Component({
@@ -14,103 +11,40 @@ import { Gender } from '../../interface/gender';
   styleUrls: ['./approve.component.css']
 })
 export class ApproveComponent implements OnInit {
-  // form varaibles
-  public customerForm: FormGroup;
-  countries: Country[];
-  states: State[];
-  CountryId : number;
-  StateId : number;
-  gender: Gender;
-  GenderId: string;
-
+  showProgress: boolean;
+  
   // table variables
-  allCustomer: Customer[];
+  orderITem: Order[];
   public array: any;
-  public displayedColumns = ['Storename', 'Zone', 'MarketPlace', 'Surname', 'Firstname',
-                              'PhoneNo', 'details', 'update', 'delete'];
-                              
-
-  public dataSource = new MatTableDataSource<Customer>();
+  public displayedColumns = [ 'OrderTag',
+                              'CustomerId',
+                              'TotalOrderAmount',
+                              'DateCreated',
+                              'PaymentType',                              
+                              'AgentId',
+                              'view'
+                              ]
+                            
+  public dataSource = new MatTableDataSource<Order>();
 
   public pageSize = 10;
   public currentPage = 0;
   public totalSize = 0;
   
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
  
 
-  constructor(private repoService: RepositoryService) { }
+  constructor(private repoService: RepositoryService,
+               private dialog: MatDialog,               
+               private progressService: ProgressService ) { }
 
-  ngOnInit() {
-    this.initializeForm();
-    this.getCountry();
-    this.getCustomer();
-    this.getGender();
-  }
-
-  initializeForm(){
-    this.customerForm = new FormGroup({      
-      Storename: new FormControl('', [Validators.required]),
-      Zone: new FormControl('', [Validators.required]),
-      MarketPlace: new FormControl(''),
-      Surname: new FormControl(''),
-      Firstname: new FormControl(''),
-      Othernames: new FormControl(''),
-      GenderId: new FormControl(''),
-      PhoneNo: new FormControl(''),
-      CustomerEmail: new FormControl(''),
-      Remark: new FormControl(''),    
-      CountryId: new FormControl(''),
-      StateId: new FormControl('')
-    });   
-        
-  }
-
-  public hasError = (controlName: string, errorName: string) => {
-    return this.customerForm.controls[controlName].hasError(errorName);
-  }
-
-  getCountry(){
-    this.repoService.GetAll("api/country/Get")
-    .subscribe(country => {
-      this.countries = country;            
-      console.log(country)
-    });
-  }
-
-  getState(id: number){
-    this.repoService.GetAll(`api/State/Get/${id}`)
-    .subscribe(state => {
-      this.states = state;            
-      console.log(state)
-    });
-  }
-
-  getGender(){
-    this.repoService.GetAll("api/Gender/Get")
-    .subscribe(gender => {
-      this.gender = gender;            
-      console.log(gender)
-    });
-  }
-
-  fillState(CountryId){
-    alert(CountryId);
-    this.getState(CountryId);
-  }
-
-  public addCustomer(customerFormValue){
-    console.log(customerFormValue);
-    if(this.customerForm.valid){
-      this.repoService.POST(customerFormValue, `api/Customer/Post`)
-      .subscribe(res => {                 
-        console.log(res)
-      });
-    }    
+  ngOnInit() {   
+    this.getStockIn();
   }
 
   public handlePage(e: any) {
@@ -120,19 +54,19 @@ export class ApproveComponent implements OnInit {
   }
 
   
-  public getCustomer(): void {
+  public getStockIn(): void {
     
-    this.repoService.GetAll("api/Customer/Get")
-      .subscribe(customer => {
-        this.dataSource.data = customer
-        this.dataSource = new MatTableDataSource<Customer>(customer);
+    this.repoService.GetAll("api/Order/Get")
+      .subscribe(current => {
+        this.dataSource.data = current
+        this.dataSource = new MatTableDataSource<Order>(current);
         this.dataSource.paginator = this.paginator;
-        this.array = customer;
+        this.array = current;
         this.totalSize = this.array.length;
         this.iterator();
-        console.log(customer)
+        console.log(current)
       });
-  }
+  }    
 
   private iterator() {
     const end = (this.currentPage + 1) * this.pageSize;

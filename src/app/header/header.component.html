@@ -11,10 +11,12 @@
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
         <ul fxLayout fxLayoutGap="15px" class="navigation-items">
             <li>
-                username
+                {{username}}
             </li>
             <li>
-                <a routerLink="/">Logout</a>
+                <button mat-icon-button (click)="onLogout()">
+                    <mat-icon>autorenew</mat-icon>
+                </button>
             </li>
         </ul>
     </div>

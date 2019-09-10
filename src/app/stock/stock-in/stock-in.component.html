@@ -1,11 +1,11 @@
 <section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
-
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
         <mat-card fxFlex="100%" fxFlex.xs="100%">
             <mat-card-title>Add New Stock - Enter and list all new Stock Entry</mat-card-title>
                 <mat-card-content>
                     <mat-tab-group>
                             <mat-tab label="Enter New Stock Information"> 
-                                    <mat-card fxFlex="300px" fxFlex.xs="100%">
+                                    <mat-card fxFlex="350px" fxFlex.xs="100%">
                                             <mat-card-title>Enter New Stock Information</mat-card-title>
                                             <form [formGroup]="stockinForm" autocomplete="off" novalidate 
                                                 (ngSubmit)="newStockIn(stockinForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
@@ -96,23 +96,23 @@
                                         </mat-card> 
                             </mat-tab>
                             <mat-tab label="New Stock Entry">
-                                    <mat-card fxFlex="700px" fxFlex.xs="100%">
+                                    <mat-card fxFlex="100%" fxFlex.xs="100%">
                                             <mat-card-title>New Stock Entry</mat-card-title>
                                             <mat-card-content>
-                                                <div fxLayout fxLayoutAlign="center center">
-                                                    <mat-form-field fxFlex="40%">
+                                                <div fxLayout="row">
+                                                    <mat-form-field>
                                                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                                                     </mat-form-field>
                                                 </div>
-                                                <table mat-table [dataSource]="dataSource" matSort>
+                                                <table mat-table [dataSource]="dataSource" >
                                                         <ng-container matColumnDef="StockName">
                                                         <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
-                                                        <mat-cell *matCellDef="let element"  data-label="Product Name"> {{element.CompanyProductNameId}} </mat-cell>
+                                                        <mat-cell *matCellDef="let element"  data-label="Product Name"> {{element.CompanyStockTag.Stockname}} </mat-cell>
                                                         </ng-container>
                                                 
                                                         <ng-container matColumnDef="SupplierName">
                                                             <mat-header-cell *matHeaderCellDef> Supplier Name </mat-header-cell>
-                                                            <mat-cell *matCellDef="let element"  data-label="Supplier Name"> {{element.SupplierId}} </mat-cell>
+                                                            <mat-cell *matCellDef="let element"  data-label="Supplier Name"> {{element.Supplier.CompanyName}} </mat-cell>
                                                         </ng-container>
                                                 
                                                         <ng-container matColumnDef="SupliedPrice">

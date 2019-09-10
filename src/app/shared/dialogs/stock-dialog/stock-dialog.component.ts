@@ -20,7 +20,9 @@ export class StockDialogComponent implements OnInit {
   stockExistState: boolean;
 
   reorderLevel: number;
+  setReorderLevel : number;
   CompanyUnitPrice: number;
+  SetCompanyPrice: number;  
   Comment: string;
   alteredStock : AlteredStockIn;
 
@@ -33,14 +35,14 @@ export class StockDialogComponent implements OnInit {
               }
 
   ngOnInit() {    
-    //this.checkCurrentStock(this._data.id);
+    //this.checkCurrentStock(this._data.id);    
   }
 
 
   checkCurrentStock(id: string){
     this.repoService.GetByUnique(id, `api/CurrentStock/GetById`)
     .subscribe(current => {
-      this.currentStock = current;            
+      this.currentStock = current;                  
       console.log(current);
       if(this.currentStock == null)
       {
@@ -51,32 +53,56 @@ export class StockDialogComponent implements OnInit {
       {
         this.stockExist = true;
         this.stockExistState = true;
+        this.setReorderLevel = this.currentStock.ReorderLevel;
       }
     });
   }
 
   public closeDialog = () => {
-    this.alteredStock = { 
-      id : this._data.id,    
-      CompanyProductNameId : this._data.CompanyProductNameId,
-      SupplierId : this._data.SupplierId,
-      SupplierProductName : this._data.SupplierProductName,
-      SuppliedPrice : this._data.SuppliedPrice,
-      UnitPrice : this._data.UnitPrice,
-      QuantitySupplied : this._data.QuantitySupplied,
-      DateSupplied : this._data.DateSupplied,
-      PackUnit : this._data.PackUnit,
-      BatchNo : this._data.BatchNo,
-      CreatedUser : this._data.CreatedUser,
-      CreatedDate : this._data.CreatedDate,
-      CompanyStockTag : this._data.CompanyStockTag,
-      Supplier : this._data.Supplier,
-      reorderLevel : this.reorderLevel,
-      CompanyUnitPrice : this.CompanyUnitPrice,
-      Comment : this.Comment,
-      stockExist : this.stockExistState
+    if(this.stockExist == true && this.SetCompanyPrice == null)
+    {
+      alert('You must set Company Price');
+    } 
+    else if(this.stockExist == false && this.reorderLevel == null)
+    {
+      alert('You must set Reorder Level');
     }
-    this.dialogRef.close(this.alteredStock);
+    else if(this.stockExist == false && this.CompanyUnitPrice == null)
+    {
+      alert('You must set Company Price');
+    }    
+    else
+    {
+      if(this.setReorderLevel != null)
+      {
+        // change reorder level if it is changed
+        this.reorderLevel = this.setReorderLevel;
+        //alert(this.reorderLevel);
+      }
+      this.alteredStock = { 
+        id : this._data.id,    
+        CompanyProductNameId : this._data.CompanyProductNameId,
+        SupplierId : this._data.SupplierId,
+        SupplierProductName : this._data.SupplierProductName,
+        SuppliedPrice : this._data.SuppliedPrice,
+        UnitPrice : this._data.UnitPrice,
+        QuantitySupplied : this._data.QuantitySupplied,
+        DateSupplied : this._data.DateSupplied,
+        PackUnit : this._data.PackUnit,
+        BatchNo : this._data.BatchNo,
+        CreatedUser : this._data.CreatedUser,
+        CreatedDate : this._data.CreatedDate,
+        CompanyStockTag : this._data.CompanyStockTag,
+        Supplier : this._data.Supplier,
+        reorderLevel : this.reorderLevel,
+        CompanyUnitPrice : this.CompanyUnitPrice, 
+        SetCompanyPrice : this.SetCompanyPrice,       
+        Comment : this.Comment,
+        stockExist : this.stockExistState
+      }
+      this.dialogRef.close(this.alteredStock);
+    }
+    
   }
 
 }
@@ -97,7 +123,8 @@ interface AlteredStockIn {
   CompanyStockTag: CompanyStockTag;
   Supplier: Supplier;
   reorderLevel: number;
-  CompanyUnitPrice: number;
+  CompanyUnitPrice: number;  
+  SetCompanyPrice: number;
   Comment: string;
   stockExist : boolean;
 }

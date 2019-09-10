@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RepositoryService } from './../../repository.service';
 
 import { MatTableDataSource, MatPaginator} from '@angular/material';
+import { AuthenticationService } from '../../authentication.service';
+import * as jwt_decode from 'jwt-decode';
 
 import { Login } from '../login';
 
@@ -15,7 +18,9 @@ export class LoginComponent implements OnInit {
 
   public loginForm: FormGroup;
 
-  constructor(private repoService: RepositoryService) { }
+  constructor(private repoService: RepositoryService,
+              private authenticationService: AuthenticationService,
+              private router: Router) { }
 
   ngOnInit() {
 
@@ -37,10 +42,21 @@ export class LoginComponent implements OnInit {
   }
 
   private executeLoginAction = (loginFormValue) => {
-    let loginValues: Login = {
-      username: loginFormValue.username,
-      password: loginFormValue.password
-    } 
+    //let loginValues: Login = {
+      //var username =  loginFormValue.username;
+      //var password =  loginFormValue.password + "&grant_type=password";
+    //} 
+    let model = "username=" + loginFormValue.username + "&password=" + loginFormValue.password + "&grant_type=" + "password";
+    this.authenticationService.login(model)
+    .subscribe(res => {
+      this.router.navigate(['/home']);
+      //console.log(res);
+      //var decode = jwt_decode(localStorage.getItem('suitrohUser'));
+      //console.log(decode);
+    },
+    error => {
+      console.log(error);
+    })
   }
 
   /*public getAllCustomers = () => {

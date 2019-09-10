@@ -1,173 +1,65 @@
-<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
-    <mat-card fxFlex="100%" fxFlex.xs="100%">
-            <mat-card-title>Approve Orders</mat-card-title>
-            <mat-card-content>
-                <mat-tab-group>
-                    <mat-tab label="Enter Customer Information"> 
-                            <mat-card fxFlex="300px" fxFlex.xs="100%">
-                                    <mat-card-title>Enter Customer Information</mat-card-title>
-                                    <form [formGroup]="customerForm" autocomplete="off" novalidate 
-                                        (ngSubmit)="addCustomer(customerForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
-                                        fxLayoutGap="10px">
-                                        <mat-card-content>
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Store Name" 
-                                                formControlName="Storename" id="storename">
-                                                <mat-error *ngIf="hasError('Storename', 'required')">
-                                                    Store Name is required
-                                                </mat-error>
-                                            </mat-form-field>
-                            
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Zone" 
-                                                formControlName="Zone" id="zone">
-                                            </mat-form-field>
-                            
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Market Place" 
-                                                formControlName="MarketPlace" id="marketPlace">                                                
-                                            </mat-form-field>
-                            
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Surname" 
-                                                formControlName="Surname" id="surname">                                               
-                                            </mat-form-field>
-
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Firstname" 
-                                                formControlName="Firstname" id="firstname">                                               
-                                            </mat-form-field>
-
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Othernames" 
-                                                formControlName="Othernames" id="othernames">                                               
-                                            </mat-form-field>
-
-                                            <mat-form-field>                                                
-                                                <mat-select placeholder="Choose Gender" formControlName="GenderId" [(ngModel)]="GenderId">                      
-                                                <mat-option *ngFor="let gen of gender" [value]="gen.id">{{gen.Description}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Phone Number" 
-                                                formControlName="PhoneNo" id="PhoneNo">                                               
-                                            </mat-form-field>
-
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Customer Email" 
-                                                formControlName="CustomerEmail" id="customerEmail">                                                                   
-                                            </mat-form-field>
-
-                                            <mat-form-field>
-                                                <input matInput type="text" placeholder="Remark" 
-                                                formControlName="Remark" id="Remark">                                               
-                                            </mat-form-field>                                           
-                            
-                                            <mat-form-field>
-                                                <mat-label>Country</mat-label>
-                                                <mat-select placeholder="Choose Country" formControlName="CountryId" [(ngModel)]="CountryId"
-                                                (selectionChange)="fillState(CountryId)">                      
-                                                <mat-option *ngFor="let count of countries" [value]="count.id">{{count.Description}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                            
-                                            <mat-form-field>
-                                                <mat-label>State</mat-label>
-                                                <mat-select placeholder="Choose State" formControlName="StateId" [(ngModel)]="StateId">                      
-                                                <mat-option *ngFor="let stat of states" [value]="stat.id">{{stat.Description}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>                                           
-                            
-                                        </mat-card-content>
-                                        <mat-card-actions>
-                                            <button mat-raised-button color="primary" [disabled]="!customerForm.valid">Add Customer</button>
-                                        </mat-card-actions>
-                                    </form>        
-                                </mat-card> 
-                    </mat-tab>
-                    <mat-tab label="Customer List">
-                            <mat-card fxFlex="700px" fxFlex.xs="100%">
-                                    <mat-card-title>Customer List</mat-card-title>
-                                    <mat-card-content>
-                                        <div fxLayout fxLayoutAlign="center center">
-                                            <mat-form-field fxFlex="40%">
-                                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                                            </mat-form-field>
-                                        </div>
-                                        <table mat-table [dataSource]="dataSource" matSort>
-                                                <ng-container matColumnDef="Storename">
-                                                <th mat-header-cell *matHeaderCellDef> Store Name </th>
-                                                <td mat-cell *matCellDef="let element"> {{element.Storename}} </td>
-                                                </ng-container>
-                                        
-                                                <ng-container matColumnDef="Zone">
-                                                    <th mat-header-cell *matHeaderCellDef> Zone </th>
-                                                    <td mat-cell *matCellDef="let element"> {{element.Zone}} </td>
-                                                </ng-container>
-                                        
-                                                <ng-container matColumnDef="MarketPlace">
-                                                    <th mat-header-cell *matHeaderCellDef> Market Place </th>
-                                                    <td mat-cell *matCellDef="let element"> {{element.MarketPlace}} </td>
-                                                </ng-container>
-                                        
-                                                <ng-container matColumnDef="Surname">
-                                                    <th mat-header-cell *matHeaderCellDef> Surname </th>
-                                                    <td mat-cell *matCellDef="let element"> {{element.Surname}} </td>
-                                                </ng-container>
-                                        
-                                                <ng-container matColumnDef="Firstname"> 
-                                                    <th mat-header-cell *matHeaderCellDef> Firstname </th>
-                                                    <td mat-cell *matCellDef="let element"> {{element.Firstname}} </td>
-                                                </ng-container>
-
-                                                <ng-container matColumnDef="PhoneNo"> 
-                                                    <th mat-header-cell *matHeaderCellDef> PhoneNo </th>
-                                                    <td mat-cell *matCellDef="let element"> {{element.PhoneNo}} </td>
-                                                </ng-container>                                    
-                                            
-                                                <ng-container matColumnDef="details">
-                                                <th mat-header-cell *matHeaderCellDef> Details </th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    <button mat-icon-button color="primary" (click)="redirectToDetails(element.CustomerID)">
-                                                        <mat-icon class="mat-18">reorder</mat-icon>
-                                                    </button>
-                                                </td>
-                                                </ng-container>
-                                            
-                                                <ng-container matColumnDef="update">
-                                                    <th mat-header-cell *matHeaderCellDef> Update </th>
-                                                    <td mat-cell *matCellDef="let element">
-                                                    <button mat-icon-button color="accent" (click)="redirectToUpdate(element.CustomerID)">
-                                                        <mat-icon class="mat-18">system_update</mat-icon>
-                                                    </button>
-                                                    </td>
-                                                </ng-container>
-                                            
-                                                <ng-container matColumnDef="delete">
-                                                    <th mat-header-cell *matHeaderCellDef> Delete </th>
-                                                    <td mat-cell *matCellDef="let element">
-                                                        <button mat-icon-button color="warn" (click)="redirectToDelete(element.CustomerID)">
-                                                            <mat-icon class="mat-18">delete</mat-icon>
-                                                        </button>
-                                                    </td>
-                                                    </ng-container>
-                                            
-                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                                            </table>
-                                            <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
-                                                [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
-                                            </mat-paginator>
-                                        
-                                    </mat-card-content>      
-                                </mat-card>
-                        </mat-tab>
-                    <mat-tab label="">
-                        <p></p>
-                        </mat-tab>
-                </mat-tab-group>
-        </mat-card-content>
-    </mat-card>         
+<section>    
+        <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"
+        ></mat-progress-bar>
+    <mat-card>
+        <mat-card-title>Order List</mat-card-title>
+        <mat-card-content>
+            <div class="example-header" fxLayout="row">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <div class="example-container mat-elevation-z8">
+                <mat-table [dataSource]="dataSource" matSort >
+                    <ng-container matColumnDef="OrderTag">
+                      <mat-header-cell *matHeaderCellDef> Order Id </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="Order Id"> {{element.OrderTag}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="CustomerId">
+                        <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>>
+                        <mat-cell *matCellDef="let element" data-label="Customer"> {{element.CustomerId}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="TotalOrderAmount">
+                        <mat-header-cell *matHeaderCellDef> Total Amount </mat-header-cell>>
+                        <mat-cell *matCellDef="let element" data-label="Total Amount"> {{element.TotalOrderAmount}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="DateCreated">
+                        <mat-header-cell *matHeaderCellDef> Date Created </mat-header-cell>>
+                        <mat-cell *matCellDef="let element" data-label="Date Created"> {{element.DateCreated | date: 'medium'}} </mat-cell>
+                    </ng-container>                   
+            
+                    <ng-container matColumnDef="PaymentType">
+                        <mat-header-cell *matHeaderCellDef> Payment Type </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="Payment Type"> {{element.PaymentType}} </mat-cell>
+                    </ng-container>  
+                    
+                    <ng-container matColumnDef="AgentId">
+                        <mat-header-cell *matHeaderCellDef> Agent </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="Agent"> {{element.AgentId}} </mat-cell>
+                    </ng-container>
+                   
+                    <ng-container matColumnDef="view">
+                      <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="view">
+                        <button mat-icon-button color="primary" (click)="viewItems(element)">
+                            <mat-icon class="mat-18">more_horiz</mat-icon>
+                        </button>
+                      </mat-cell>
+                    </ng-container>                  
+                    
+                   
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  </mat-table>
+                  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                      [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                  </mat-paginator>
+                </div>
+            
+        </mat-card-content>      
+    </mat-card>     
     
 </section>

@@ -4,6 +4,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { SharedModule } from './shared/shared.module';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CustomHttpInterceptor } from './http-interceptor';
+import { ErrorInterceptor } from './helpers/error.interceptor';
+//import { JwtInterceptor } from './helpers/jwt.interceptor';
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -29,11 +32,10 @@ import { NavigationComponent } from './navigation/navigation.component';
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: CustomHttpInterceptor,
-    multi: true
-  }],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true },
+              //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+              { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+            {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

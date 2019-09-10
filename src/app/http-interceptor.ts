@@ -6,15 +6,30 @@ import { HttpHandler } from '@angular/common/http';
 import { HttpEvent } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { ProgressService } from './progress.service';
+import { AuthenticationService } from './authentication.service'
  
 @Injectable()
 export class CustomHttpInterceptor implements HttpInterceptor {
  
-     constructor(private progressService: ProgressService) { }
+     constructor(private progressService: ProgressService,
+                private authenticationService: AuthenticationService) { }
  
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
  
         this.progressService.show();
+        // here i have combined jwt with http interceptor
+        if(localStorage.getItem('suitrohUser') != null)
+        {
+            // add authorization header with jwt token if available
+            let currentUser = this.authenticationService.currentUserValue;
+            if(currentUser && currentUser.token) {
+                req = req.clone({
+                    setHeaders: {
+                        authorization: `Bearer ${currentUser.token}`
+                    }
+                });
+            }
+        }
  
         return next
             .handle(req)

@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-//import { DashboardComponent } from './dashboard/dashboard.component';
-//import { HeroDetailsComponent } from './hero-details/hero-details.component';
+import { AuthGuard } from './helpers/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full'},
@@ -11,7 +10,7 @@ const routes: Routes = [
   { path: 'stock', loadChildren: "./stock/stock.module#StockModule"},
   { path: 'register', loadChildren: "./register/register.module#RegisterModule"},
   { path: 'transaction', loadChildren: "./transaction/transaction.module#TransactionModule"},
-  { path: 'home', component: HomeComponent}  
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] }  
   //{ path: 'dashboard', component: DashboardComponent },
   //{ path: 'detail/:id', component: HeroDetailsComponent}
 ]

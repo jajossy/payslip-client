@@ -22,14 +22,14 @@
             </div>
 
             <div fxLayout="row wrap" fxFlex>
-                <div fxFlex><strong>Unit Price: </strong></div>
-                <div fxFlex>{{data.UnitPrice | number: '1.2-2'}}&nbsp;naira</div>
+                <div fxFlex><strong>Quantity Supplied:</strong></div>
+                <div fxFlex>{{data.QuantitySupplied}}&nbsp;Items</div>
             </div>
 
             <div fxLayout="row wrap" fxFlex>
-                <div fxFlex><strong>Quantity Supplied:</strong></div>
-                <div fxFlex>{{data.QuantitySupplied}}&nbsp;Items</div>
-            </div>           
+                <div fxFlex><strong>Supplier Unit Price: </strong></div>
+                <div fxFlex>{{data.UnitPrice | number: '1.2-2'}}&nbsp;naira</div>
+            </div>                          
 
             <mat-divider></mat-divider>       
             
@@ -40,11 +40,11 @@
                     previously exist in the Company Stock, Set parameters below and Add</p>
                 <form>
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Enter Reorder Level" 
+                        <input matInput type="number" placeholder="Enter Reorder Level" 
                         [(ngModel)]="reorderLevel" [ngModelOptions]="{standalone: true}">                        
                     </mat-form-field> 
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Enter Selling Unit Price" 
+                        <input matInput type="number" placeholder="Enter Company Unit Price" 
                         [(ngModel)]="CompanyUnitPrice" [ngModelOptions]="{standalone: true}">                        
                     </mat-form-field>
                     <mat-form-field>
@@ -60,17 +60,43 @@
             <div fxLayout="row wrap" fxFlex>
                 <div fxFlex><strong>Stock name:</strong></div>
                 <div fxFlex>{{currentStock.CompanyStockTag.Stockname}}</div>
-            </div>                      
-
+            </div> 
+            
             <div fxLayout="row wrap" fxFlex>
-                <div fxFlex><strong>Supplied Price: </strong></div>
-                <div fxFlex>{{currentStock.SuppliedPrice | number: '1.2-2'}}&nbsp;naira</div>
-            </div>            
-
-            <div fxLayout="row wrap" fxFlex>
-                <div fxFlex><strong>Quantity Supplied:</strong></div>
+                <div fxFlex><strong>Quantity in Stock:</strong></div>
                 <div fxFlex>{{currentStock.Quantity}}&nbsp;Items</div>
-            </div>           
+            </div> 
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Previous Supplied Unit Price: </strong></div>
+                <div fxFlex>{{currentStock.SupplierUnitPrice | number: '1.2-2'}}&nbsp;naira</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Previous Company Unit Price: </strong></div>
+                <div fxFlex>{{currentStock.CompanyUnitPrice | number: '1.2-2'}}&nbsp;naira</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Previous Reorder Level: </strong></div>
+                <div fxFlex>{{currentStock.ReorderLevel}}</div>
+            </div>
+            
+            
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Company Price: </strong></div>
+                <input matInput type="number" placeholder="Set Company Price" 
+                [(ngModel)]="SetCompanyPrice" name="CompanyPrice">
+            </div>
+
+            <mat-divider></mat-divider> 
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>You can Reset Reorder Level: </strong></div>
+                <input matInput type="number" placeholder="Set Reorder Level" 
+                [(ngModel)]="setReorderLevel" name="ReorderLevel">
+            </div>
+                      
 
             <mat-divider></mat-divider>          
         </div>       

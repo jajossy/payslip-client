@@ -48,7 +48,7 @@ export class InsertStockComponent implements OnInit {
   constructor(private repoService: RepositoryService,
                private dialog: MatDialog,
                private formBuilder: FormBuilder,
-               private progressService: ProgressService ) { }
+               public progressService: ProgressService ) { }
 
   ngOnInit() {   
     this.getStockIn();
@@ -123,7 +123,7 @@ export class InsertStockComponent implements OnInit {
             ReorderLevel : stockInData.reorderLevel,
             PackUnit : stockInData.PackUnit,
             CompanyUnitPrice : stockInData.CompanyUnitPrice,
-            //SupplierUnitPrice : calSupplierUnitPrice,          
+            SupplierUnitPrice : stockInData.UnitPrice,          
             Comment : stockInData.Comment          
           }); 
           
@@ -163,6 +163,13 @@ export class InsertStockComponent implements OnInit {
                 
             // update old stock with new input
             this.currentStock.Quantity = this.stockAddUp;
+            this.currentStock.CompanyUnitPrice = dataset.SetCompanyPrice;
+
+            this.currentStock.ReorderLevel = dataset.ReorderLevel
+            this.currentStock.PackUnit = dataset.PackUnit
+            this.currentStock.SupplierUnitPrice = dataset.SupplierUnitPrice
+            this.currentStock.Status = dataset.Status
+            this.currentStock.Comment = dataset.Comment
           
             this.repoService.UPDATE(this.currentStock, `api/CurrentStock/Put`)
             .subscribe(res => {                 

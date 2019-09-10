@@ -1,0 +1,135 @@
+<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
+        <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+    <mat-card fxFlex="100%" fxFlex.xs="100%">
+            <mat-card-title>Add User -  Enter and list all Agents</mat-card-title>
+            <mat-card-content>
+                <mat-tab-group>
+                    <mat-tab label="Enter Agent Information"> 
+                            <mat-card fxFlex="300px" fxFlex.xs="100%">
+                                    <mat-card-title>Enter User Information</mat-card-title>
+                                    <form [formGroup]="userForm" autocomplete="off" novalidate 
+                                        (ngSubmit)="addUser(userForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+                                        fxLayoutGap="10px">
+                                        <mat-card-content>
+                                            <mat-form-field>
+                                                <input matInput type="text" placeholder="Username" 
+                                                formControlName="username" id="username">
+                                                <mat-error *ngIf="hasError('username', 'required')">
+                                                    username is required
+                                                </mat-error>
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <input matInput type="text" placeholder="Password" 
+                                                formControlName="password" id="Password">
+                                                <mat-error *ngIf="hasError('password', 'required')">
+                                                    Firstname is required
+                                                </mat-error>
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <input matInput type="text" placeholder="First Name" 
+                                                formControlName="firstName" id="FirstName">                                                
+                                            </mat-form-field>
+
+                                            <mat-form-field>
+                                                <mat-label>Lastname</mat-label>
+                                                <input matInput type="text" placeholder="Last Name" 
+                                                formControlName="lastName" id="LastName">                                                
+                                            </mat-form-field>
+                            
+                                            <mat-form-field>
+                                                <mat-label>Role</mat-label>
+                                                <mat-select placeholder="Choose Role" formControlName="RoleId" [(ngModel)]="RoleId">                      
+                                                <mat-option *ngFor="let rl of role" [value]="rl.Description">{{rl.Description}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field> 
+                                            
+                            
+                                        </mat-card-content>
+                                        <mat-card-actions>
+                                            <button mat-raised-button color="primary" [disabled]="!userForm.valid">Add User</button>
+                                        </mat-card-actions>
+                                    </form>        
+                                </mat-card> 
+                    </mat-tab>
+                    <mat-tab label="Agent List">
+                            <mat-card fxFlex="700px" fxFlex.xs="100%">
+                                    <mat-card-title>List of Agents</mat-card-title>
+                                    <mat-card-content>
+                                        <div fxLayout fxLayoutAlign="center center">
+                                            <mat-form-field fxFlex="40%">
+                                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                            </mat-form-field>
+                                        </div>
+                                        <table mat-table [dataSource]="dataSource" matSort>
+                                                <ng-container matColumnDef="Surname">
+                                                <th mat-header-cell *matHeaderCellDef> Surname </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Surname}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="Firstname">
+                                                    <th mat-header-cell *matHeaderCellDef> Firstname </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.Firstname}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="Othernames">
+                                                    <th mat-header-cell *matHeaderCellDef>Othernames</th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.Othernames}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="AllocatedZone">
+                                                    <th mat-header-cell *matHeaderCellDef> Allocated Zone </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.AllocatedZone}} </td>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="Country"> 
+                                                    <th mat-header-cell *matHeaderCellDef> Country </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.Country}} </td>
+                                                </ng-container>                                      
+                                            
+                                                <ng-container matColumnDef="details">
+                                                <th mat-header-cell *matHeaderCellDef> Details </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <button mat-icon-button color="primary" (click)="redirectToDetails(element.CustomerID)">
+                                                        <mat-icon class="mat-18">reorder</mat-icon>
+                                                    </button>
+                                                </td>
+                                                </ng-container>
+                                            
+                                                <ng-container matColumnDef="update">
+                                                    <th mat-header-cell *matHeaderCellDef> Update </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                    <button mat-icon-button color="accent" (click)="redirectToUpdate(element.CustomerID)">
+                                                        <mat-icon class="mat-18">system_update</mat-icon>
+                                                    </button>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <ng-container matColumnDef="delete">
+                                                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        <button mat-icon-button color="warn" (click)="redirectToDelete(element.CustomerID)">
+                                                            <mat-icon class="mat-18">delete</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                    </ng-container>
+                                            
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                            </table>
+                                            <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                                                [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                                            </mat-paginator>
+                                        
+                                    </mat-card-content>      
+                                </mat-card>
+                        </mat-tab>
+                    <mat-tab label="">
+                        <p></p>
+                        </mat-tab>
+                </mat-tab-group>
+        </mat-card-content>
+    </mat-card>         
+    
+</section>

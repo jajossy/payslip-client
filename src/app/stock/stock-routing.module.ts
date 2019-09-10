@@ -9,15 +9,17 @@ import { StockInComponent } from './stock-in/stock-in.component';
 import { InsertStockComponent } from './insert-stock/insert-stock.component';
 import { CurrentStockComponent } from './current-stock/current-stock.component';
 
+import { AuthGuard } from '../helpers/auth.guard';
+
 const routes: Routes = [
-  { path: '', redirectTo: '/', pathMatch: 'full'},
-  { path: 'stock', component: StockComponent, children: [    
-    { path: 'supplier', component: SupplierComponent },
-    { path: 'addsupplier', component: AddSupplierComponent },
-    { path: 'stocktag', component: StockTagComponent },
-    { path: 'stockin', component: StockInComponent },
-    { path: 'insertstock', component: InsertStockComponent },
-    { path: 'currentstock', component: CurrentStockComponent }
+  { path: '', redirectTo: '/stock/', pathMatch: 'full'},
+  { path: 'stock', component: StockComponent, canActivate: [AuthGuard], children: [    
+    { path: 'supplier', component: SupplierComponent, canActivate: [AuthGuard] },
+    { path: 'addsupplier', component: AddSupplierComponent, canActivate: [AuthGuard] },
+    { path: 'stocktag', component: StockTagComponent, canActivate: [AuthGuard] },
+    { path: 'stockin', component: StockInComponent, canActivate: [AuthGuard] },
+    { path: 'insertstock', component: InsertStockComponent, canActivate: [AuthGuard] },
+    { path: 'currentstock', component: CurrentStockComponent, canActivate: [AuthGuard] }
   ] }
 ];
 

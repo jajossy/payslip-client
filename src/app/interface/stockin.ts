@@ -15,5 +15,5 @@ export interface StockIn {
     CreatedUser? : string;
     CreatedDate	: Date;
     CompanyStockTag: CompanyStockTag;
-    Supplier: Supplier;
+    Supplier: Supplier;    
 }

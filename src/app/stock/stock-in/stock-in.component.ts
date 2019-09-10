@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CompanyStockTag } from '../../interface/companystocktag';
 import { Supplier } from '../../interface/supplier';
 import { RepositoryService } from './../../repository.service';
-import { MatTableDataSource, MatPaginator} from '@angular/material';
+import { ProgressService } from './../../progress.service';
+import { MatTableDataSource, MatPaginator, MatDialog} from '@angular/material';
+import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-stock-in',
@@ -11,6 +13,7 @@ import { MatTableDataSource, MatPaginator} from '@angular/material';
   styleUrls: ['./stock-in.component.css']
 })
 export class StockInComponent implements OnInit {
+  showProgress: boolean;
   // form varaibles
   public stockinForm: FormGroup; 
   companyStockTag: CompanyStockTag; 
@@ -36,7 +39,9 @@ export class StockInComponent implements OnInit {
   }
  
 
-  constructor(private repoService: RepositoryService) { }
+  constructor(private repoService: RepositoryService,
+              public progressService: ProgressService,
+              private dialog: MatDialog,) { }
 
   ngOnInit() {
     this.initializeForm();
@@ -85,6 +90,12 @@ export class StockInComponent implements OnInit {
       this.repoService.POST(stockinFormValue, `api/Stockin/Post`)
       .subscribe(res => {                 
         console.log(res)
+        let dialogRef = this.dialog.open(SuccessDialogComponent, {
+          width: '250px',
+          disableClose: true,
+          data: {message: "New Stock Added Successfully"}
+        });
+        this.getStockIn();
       });
     }    
   }

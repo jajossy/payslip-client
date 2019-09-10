@@ -1,6 +1,7 @@
 <section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
     <mat-card fxFlex="60%" fxFlex.xs="100%">
-        <mat-card-title>Product List</mat-card-title>
+        <mat-card-title>Transactional Product List</mat-card-title>
         <mat-card-content >
             
             
@@ -85,7 +86,7 @@
 </section>
 <section fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="15px"
             style="margin-top:2%">
-            <form [formGroup]="salesForm" autocomplete="off" novalidate (ngSubmit)="addSales(salesForm.value)"
+            <form [formGroup]="salesForm" autocomplete="off" novalidate (ngSubmit)="addSalesOrder(salesForm.value)"
             fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="2px">
                 <mat-card-content>
             
@@ -97,7 +98,7 @@
                                                                    
                     <mat-form-field>
                         <input matInput type="number" placeholder="Total Amount"  formControlName="TotalOrderAmount" 
-                        disabled value="{{TotalOrderAmount}}" readonly>
+                        disabled  [(ngModel)]="TotalOrderAmount">
                     </mat-form-field>
                     
                     <mat-form-field>                                                
@@ -108,7 +109,7 @@
                    
                 </mat-card-content>
                 <mat-card-actions>
-                    <button mat-raised-button color="primary" [disabled]="!salesForm.valid">New Sales</button>
+                    <button mat-raised-button color="primary" [disabled]="!salesForm.valid">Make New Order</button>
                 </mat-card-actions>
             </form>
 </section>

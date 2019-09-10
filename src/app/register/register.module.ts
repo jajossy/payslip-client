@@ -7,13 +7,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AgentComponent } from './agent/agent.component';
 import { CustomerComponent } from './customer/customer.component';
+import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register.component';
 
 
 @NgModule({
   declarations: [AgentComponent,
                   RegisterComponent,
-                  CustomerComponent
+                  CustomerComponent,
+                  UserComponent
                 ],
   imports: [
     CommonModule,

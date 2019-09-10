@@ -28,13 +28,14 @@ export class OrderComponent implements OnInit {
   order: Order[];
   orderItem: OrderItem[] = [];
   allCustomer: Customer[];
+  orderItem2 : OrderItem2[] = [];
   //orderItem: Observable<OrderItem[]>;
   
   currentStock: CurrentStock[];
+  dynamicCurrentStock: CurrentStock;
   CustomerId : string;
   TotalOrderAmount : number = 0;
-  GenderId: string;
-  totalPrice: number = 0
+  GenderId: string;  
 
   public array: any;
   public displayedColumns = ['Product',
@@ -51,7 +52,7 @@ export class OrderComponent implements OnInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<any>;
 
   constructor(private repoService: RepositoryService, private dialog: MatDialog,
-              private progressService: ProgressService) { }
+              public progressService: ProgressService) { }
 
   ngOnInit() {  
     this.initializeForm();  
@@ -79,7 +80,7 @@ export class OrderComponent implements OnInit {
 
   
   getCurrent(){
-    this.repoService.GetAll("api/CurrentStock/Get")
+    this.repoService.GetAll("api/Order_CurrentStock/Get")
     .subscribe(current => {
       this.currentStock = current;            
       console.log(current)
@@ -89,6 +90,7 @@ export class OrderComponent implements OnInit {
   
   
   addToCart(stock){
+    this.dataSource = this.orderItem;
     console.log(stock); 
     console.log(this.dataSource);
     var check = this.dataSource.filter(x => x.ProductId === stock.CompanyStockTag.id)
@@ -164,12 +166,13 @@ export class OrderComponent implements OnInit {
         value.SalesTotalAmount = total;
       }
       // add up all total prices together 
-      console.log(this.dataSource);          
+      console.log(this.dataSource);  
+      var total = 0;  
       this.dataSource.forEach(y => {
         console.log(y.SalesTotalAmount);
-        this.totalPrice += y.SalesTotalAmount;        
+        total += y.SalesTotalAmount;        
       })
-      this.TotalOrderAmount = this.totalPrice;
+      this.TotalOrderAmount = total;
 
       return true;
     });
@@ -189,9 +192,106 @@ export class OrderComponent implements OnInit {
       });
   }
 
+
+
+  public addSalesOrder(saleFormValue){
+    console.log(this.dataSource);
+    this.dataSource.forEach((x, index )=> {
+      this.orderItem2[index] = {
+        id : saleFormValue.CustomerId, // i placed the customerId in client order id to seperate in api       
+        ProductId : x.ProductId,
+        Quantity : x.Quantity,
+        SalesUnitPrice : x.SalesUnitPrice,
+        SalesTotalAmount : x.SalesTotalAmount,
+        OrderId	: x.OrderId, // i will store login id in this place as OrderId will change in api
+        BatchNo : saleFormValue.PaymentType, // i hold payment type here temporary to change to batch or null at sales
+        SuppliedUnitPrice : x.SuppliedUnitPrice,
+        SuppliedTotalPrice : x.SuppliedTotalPrice
+      }
+    });
+    
+    console.log(this.orderItem2);
+    
+    this.repoService.POST(this.orderItem2, `api/Order/Post`)
+    .subscribe(x => {
+      console.log(x);
+      /*if(this.salesForm.valid){
+        this.repoService.POST(saleFormValue, `api/sale/Post`)
+        .subscribe(res => {                 
+          console.log(res)
+          let dialogRef = this.dialog.open(SuccessDialogComponent, {
+            width: '250px',
+            disableClose: true,
+            data: {message: "Order Successfully Completely"}
+          });
+          dialogRef.afterClosed()
+          .subscribe(result => {
+            console.log("closed");*/
+  
+            // update stock accordingly
+            /*this.dataSource.forEach(y => {
+              console.log(y.SalesTotalAmount);
+              this.repoService.GetByUnique(y.ProductId, `api/Order_CurrentStock/GetById`)
+                  .subscribe(current => {
+                    this.dynamicCurrentStock = current;            
+                    var soldStock : number = y.Quantity;
+                    var quantityInStock : number = this.dynamicCurrentStock.Quantity;
+                    var balance : number = quantityInStock - soldStock;
+                    // update current stock
+                    this.dynamicCurrentStock.Quantity = balance;
+                    
+                    this.repoService.UPDATE(this.dynamicCurrentStock, `api/Order_CurrentStock/Put`)
+                      .subscribe(update => {
+                        console.log();
+                        
+
+                      })
+                  });                    
+            })*/
+  
+            let dialogRef = this.dialog.open(SuccessDialogComponent, {
+              width: '250px',
+              disableClose: true,
+              data: {message: "Stock successfully ordered"}                                                
+            });
+            dialogRef.afterClosed()
+            .subscribe(result => {
+              console.log("closed");
+              this.getCurrent();
+              this.dataSource = [];
+              this.CustomerId = "";
+              this.TotalOrderAmount = 0;
+              this.paymentType = [];
+          });
+  
+          //});          
+        //});
+      //}   
+
+    })
+    
+  }
+
+  
+
 }
 
 export interface payment {
   id: number;
   Description: string;
 }
+
+// i will use the interface id below to get agent and customer id
+export interface OrderItem2 {
+    id : string;
+    ProductId : string;
+    Quantity : number;
+    SalesUnitPrice : number;
+    SalesTotalAmount : number;
+    OrderId	: string;
+    BatchNo? : string;
+    SuppliedUnitPrice : number;
+    SuppliedTotalPrice : number;    
+}
+
+
