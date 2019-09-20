@@ -14,12 +14,12 @@ import { AuthGuard } from '../helpers/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: '/stock/', pathMatch: 'full'},
   { path: 'stock', component: StockComponent, canActivate: [AuthGuard], children: [    
-    { path: 'supplier', component: SupplierComponent, canActivate: [AuthGuard] },
-    { path: 'addsupplier', component: AddSupplierComponent, canActivate: [AuthGuard] },
-    { path: 'stocktag', component: StockTagComponent, canActivate: [AuthGuard] },
-    { path: 'stockin', component: StockInComponent, canActivate: [AuthGuard] },
-    { path: 'insertstock', component: InsertStockComponent, canActivate: [AuthGuard] },
-    { path: 'currentstock', component: CurrentStockComponent, canActivate: [AuthGuard] }
+    { path: 'supplier', component: SupplierComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'manager', 'admin']} },
+    { path: 'addsupplier', component: AddSupplierComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'manager', 'admin']} },
+    { path: 'stocktag', component: StockTagComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'manager', 'admin']} },
+    { path: 'stockin', component: StockInComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'manager', 'admin']} },
+    { path: 'insertstock', component: InsertStockComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'manager', 'admin']} },
+    { path: 'currentstock', component: CurrentStockComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'manager', 'admin']} }
   ] }
 ];
 

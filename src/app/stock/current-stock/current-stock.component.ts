@@ -3,6 +3,9 @@ import { CurrentStock } from '../../interface/currentstock';
 import { RepositoryService } from './../../repository.service';
 import { ProgressService } from './../../progress.service';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/success-dialog.component';
+import { AuthenticationService } from '../../authentication.service';
 
 
 @Component({
@@ -12,6 +15,14 @@ import { MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/ma
 })
 export class CurrentStockComponent implements OnInit {
   showProgress: boolean;
+  // form varaibles
+  public currentForm: FormGroup;
+  currentUpdateButton : boolean = false;
+  resetButton: boolean  = true;
+  selected : number;
+  StockName: string = "";
+
+  currentInventory: CurrentStock;
   
   // table variables
   currentStock: CurrentStock[];
@@ -42,10 +53,25 @@ export class CurrentStockComponent implements OnInit {
 
   constructor(private repoService: RepositoryService,
                private dialog: MatDialog,               
-               private progressService: ProgressService ) { }
+               private progressService: ProgressService,
+               private authenticationService: AuthenticationService ) { }
 
   ngOnInit() {   
     this.getStockIn();
+    this.initializeForm();
+  }
+
+  initializeForm(){
+    this.currentForm = new FormGroup({            
+      ReorderLevel: new FormControl('', [Validators.required]),
+      PackUnit: new FormControl('', [Validators.required]),
+      CompanyUnitPrice: new FormControl('', [Validators.required]),    
+      CreatedUser: new FormControl('')
+    });
+  }
+
+  public hasError = (controlName: string, errorName: string) => {
+    return this.currentForm.controls[controlName].hasError(errorName);
   }
 
   public handlePage(e: any) {
@@ -75,5 +101,47 @@ export class CurrentStockComponent implements OnInit {
     const part = this.array.slice(start, end);
     this.dataSource = part;
   }  
+
+  public updateStock(stock){
+    this.selected = 1;    
+    this.currentUpdateButton = true;
+    this.currentInventory = stock;
+    this.StockName = this.currentInventory.CompanyStockTag.Stockname; // set ti identify stock at update
+
+    this.currentForm = new FormGroup({            
+      ReorderLevel: new FormControl(stock.ReorderLevel, [Validators.required]),
+      PackUnit: new FormControl(stock.PackUnit, [Validators.required]),
+      CompanyUnitPrice: new FormControl(stock.CompanyUnitPrice, [Validators.required])  
+    });
+    console.log(stock);    
+  }
+
+  public updateCurrent(){    
+    this.currentInventory.ReorderLevel = this.currentForm.controls["ReorderLevel"].value;    
+    this.currentInventory.PackUnit = this.currentForm.controls["PackUnit"].value;
+    this.currentInventory.CompanyUnitPrice = this.currentForm.controls["CompanyUnitPrice"].value;     
+    this.currentInventory.CreatedUser =  this.authenticationService.currentUserValue.UserId;
+    console.log(this.currentInventory); 
+    this.currentUpdateButton = false // disable update button  
+    
+    this.repoService.UPDATE(this.currentInventory, `api/CurrentStock/Put`)
+      .subscribe(res => {                 
+        console.log(res)
+          let dialogRef = this.dialog.open(SuccessDialogComponent, {
+            width: '250px',
+            disableClose: true,
+            data: {message: "Stock Successfully Updated"}
+          });
+          dialogRef.afterClosed()
+          .subscribe(result => {
+            console.log("closed"); 
+            this.initializeForm();           
+            this.currentUpdateButton = true;
+            this.selected = 0;
+          });
+          this.getStockIn();
+          //this.resetButton = true;
+      });
+  }
 
 }

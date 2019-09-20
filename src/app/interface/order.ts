@@ -1,3 +1,6 @@
+import { FieldAgent } from '../interface/fieldagent';
+import { Customer } from '../interface/customer';
+
 export interface Order {
     id : string;
     AgentId : string;
@@ -8,4 +11,6 @@ export interface Order {
     TotalOrderAmount : number;
     TotalSuppliedAmount? : number;
     DateCreated	: Date;
+    FieldAgent : FieldAgent;
+    Customer : Customer;
 }

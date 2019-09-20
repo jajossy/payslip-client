@@ -1,11 +1,11 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <mat-chip-list>
     <!-- <mat-chip routerLink="/stock/stock/supplier">Sample</mat-chip> -->
-    <mat-chip routerLink="/stock/stock/addsupplier">Add suppliers</mat-chip>
-    <mat-chip routerLink="/stock/stock/stocktag">Company Stock Tag</mat-chip>
-    <mat-chip routerLink="/stock/stock/stockin">Add New Stock</mat-chip>
-    <mat-chip routerLink="/stock/stock/insertstock">Add Up Stock</mat-chip>
-    <mat-chip routerLink="/stock/stock/currentstock">Stock Inventory</mat-chip>
+    <mat-chip routerLink="/stock/stock/addsupplier" *ngIf="AddSupplier">Add suppliers</mat-chip>
+    <mat-chip routerLink="/stock/stock/stocktag" *ngIf="Tag">Company Stock Tag</mat-chip>
+    <mat-chip routerLink="/stock/stock/stockin" *ngIf="NewStock">Add New Stock</mat-chip>
+    <mat-chip routerLink="/stock/stock/insertstock" *ngIf="AddInventory">Add Up Stock</mat-chip>
+    <mat-chip routerLink="/stock/stock/currentstock" *ngIf="Inventory">Stock Inventory</mat-chip>
     <!--<mat-chip color = "primary" selected>Add Company Stock Tag</mat-chip>
     <mat-chip color = "accent" selected>View Stock Level</mat-chip> -->
 </mat-chip-list>

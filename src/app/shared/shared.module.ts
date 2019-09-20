@@ -8,6 +8,7 @@ import { SuccessDialogComponent } from './dialogs/success-dialog/success-dialog.
 import { ErrorDialogComponent } from './dialogs/error-dialog/error-dialog.component';
 import { StockDialogComponent } from './dialogs/stock-dialog/stock-dialog.component';
 import { InputDialogComponent } from './dialogs/input-dialog/input-dialog.component';
+import { ApproveDialogComponent } from './dialogs/approve-dialog/approve-dialog.component';
  
 @NgModule({
   imports: [
@@ -21,9 +22,11 @@ import { InputDialogComponent } from './dialogs/input-dialog/input-dialog.compon
     MaterialModule,
     FlexLayoutModule
   ],
-  declarations: [SuccessDialogComponent, ErrorDialogComponent, StockDialogComponent, InputDialogComponent],
+  declarations: [SuccessDialogComponent, ErrorDialogComponent, StockDialogComponent, InputDialogComponent,
+                ApproveDialogComponent],
   entryComponents:[
-    SuccessDialogComponent, ErrorDialogComponent, StockDialogComponent, InputDialogComponent
+    SuccessDialogComponent, ErrorDialogComponent, StockDialogComponent, InputDialogComponent,
+     ApproveDialogComponent
   ]
 })
 export class SharedModule { }

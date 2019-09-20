@@ -90,8 +90,8 @@ export class OrderComponent implements OnInit {
   
   
   addToCart(stock){
-    this.dataSource = this.orderItem;
-    console.log(stock); 
+    //this.dataSource = this.orderItem;
+    //console.log(stock); 
     console.log(this.dataSource);
     var check = this.dataSource.filter(x => x.ProductId === stock.CompanyStockTag.id)
     console.log(check);
@@ -163,26 +163,50 @@ export class OrderComponent implements OnInit {
       if(value.ProductId == row_obj.ProductId){
         value.Quantity = row_obj.Quantity;
         var total : number = value.Quantity * value.SalesUnitPrice;
+        var totalSuppliedCost : number = value.Quantity * value.SuppliedUnitPrice;
         value.SalesTotalAmount = total;
+        value.SuppliedTotalPrice = totalSuppliedCost;
       }
       // add up all total prices together 
       console.log(this.dataSource);  
-      var total = 0;  
+      var total = 0;
+      var totalSuppliedCost = 0; 
       this.dataSource.forEach(y => {
         console.log(y.SalesTotalAmount);
-        total += y.SalesTotalAmount;        
+        total += y.SalesTotalAmount;
+        totalSuppliedCost += y.SuppliedTotalPrice;        
       })
       this.TotalOrderAmount = total;
 
       return true;
     });
   }
+
+
   deleteRowData(row_obj){
-    this.dataSource = this.dataSource.filter((value,key)=>{      
-      return value.ProductId != row_obj.ProductId;      
+    var total : number = this.TotalOrderAmount;
+    var orderTotal: number = row_obj.SalesTotalAmount;
+    this.dataSource = this.dataSource.filter((value,key)=>{  
+      //this.dataSource.splice(row_obj.ProductId);  
+      this.TotalOrderAmount = total - orderTotal;
+      return value.ProductId != row_obj.ProductId;
+            
     });
     console.log(this.dataSource);
   }
+
+  /*deleteRowData(row_obj){
+    this.dataSource = this.dataSource.filter((value,key)=>{ 
+      // remove deleted from total 
+       var totalAmount = this.TotalOrderAmount
+       if(value.ProductId == row_obj.ProductId){
+        totalAmount -=  value.SalesTotalAmount;
+        this.TotalOrderAmount = totalAmount;        
+      }      
+      return value.ProductId != row_obj.ProductId;      
+    });
+    
+  }*/
 
   public getCustomer(): void {    
     this.repoService.GetAll("api/Customer/Get")

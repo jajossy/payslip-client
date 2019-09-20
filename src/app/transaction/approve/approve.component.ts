@@ -3,6 +3,8 @@ import { Order } from '../../interface/order';
 import { RepositoryService } from './../../repository.service';
 import { ProgressService } from './../../progress.service';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
+import { ApproveDialogComponent } from '../../shared/dialogs/approve-dialog/approve-dialog.component';
+import { AuthenticationService } from '../../authentication.service';
 
 
 @Component({
@@ -12,6 +14,7 @@ import { MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/ma
 })
 export class ApproveComponent implements OnInit {
   showProgress: boolean;
+  order: Order;
   
   // table variables
   orderITem: Order[];
@@ -22,7 +25,8 @@ export class ApproveComponent implements OnInit {
                               'DateCreated',
                               'PaymentType',                              
                               'AgentId',
-                              'view'
+                              'view',
+                              'print'
                               ]
                             
   public dataSource = new MatTableDataSource<Order>();
@@ -41,7 +45,8 @@ export class ApproveComponent implements OnInit {
 
   constructor(private repoService: RepositoryService,
                private dialog: MatDialog,               
-               private progressService: ProgressService ) { }
+               private progressService: ProgressService,
+               private authenticationService: AuthenticationService ) { }
 
   ngOnInit() {   
     this.getStockIn();
@@ -74,5 +79,41 @@ export class ApproveComponent implements OnInit {
     const part = this.array.slice(start, end);
     this.dataSource = part;
   }  
+
+  public viewItems(orderElements){
+    console.log(orderElements);
+    
+        let dialogRef = this.dialog.open(ApproveDialogComponent, {
+          width: '900px',
+          disableClose: true,
+          data: {id: orderElements.id}
+        });
+        
+        dialogRef.afterClosed().subscribe(result => {
+          if(result == true){
+            console.log('cancelled');
+          }else{
+            console.log(result);
+            var id = result;
+            var id2 = this.authenticationService.currentUserValue.UserId;
+            this.repoService.GetAll(`api/Order/GetOrderApproval/${id}/${id2}`)
+            .subscribe(current => {
+              
+              console.log(current)
+              this.getStockIn();
+            });
+            
+          }
+        });
+  }
+
+  public viewReport(id){
+    //goToLink(url: string);
+    //var apiPath = `http://localhost:50029/api/GeneratePdf/GetReport/${id}`;
+    var apiPath = `http://service.suitroh.com/api/GeneratePdf/GetReport/${id}`
+    window.open(apiPath, "_blank");
+    }
+
+  
 
 }

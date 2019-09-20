@@ -1,5 +1,5 @@
 export interface FieldAgent {
-    id : number;
+    id : string;
     Surname : string;
     Firstname : string;
     Othernames? : string;

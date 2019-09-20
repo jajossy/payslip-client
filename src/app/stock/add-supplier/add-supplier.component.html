@@ -1,12 +1,11 @@
 <section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
         <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
-    <mat-card fxFlex="100%" fxFlex.xs="100%">
-            <mat-card-title>Add Suppliers -  Enter and list all Suppliers</mat-card-title>
+    <mat-card fxFlex="100%" fxFlex.xs="100%">            
             <mat-card-content>
-                <mat-tab-group>
+                <mat-tab-group [(selectedIndex)]="selected">
                     <mat-tab label="Enter Supplier Information"> 
                             <mat-card fxFlex="300px" fxFlex.xs="100%">
-                                    <mat-card-title>Enter Supplier Information</mat-card-title>
+                                    <!--<mat-card-title>Enter Supplier Information</mat-card-title>-->
                                     <form [formGroup]="supplierForm" autocomplete="off" novalidate 
                                         (ngSubmit)="addSupplier(supplierForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
                                         fxLayoutGap="10px">
@@ -79,22 +78,24 @@
                             
                                         </mat-card-content>
                                         <mat-card-actions>
-                                            <button mat-raised-button color="primary" [disabled]="!supplierForm.valid">Add Supplier</button>
+                                            <button mat-raised-button color="primary" *ngIf="supplierSaveButton" [disabled]="!supplierForm.valid">Add Supplier</button>                                            
                                         </mat-card-actions>
-                                    </form>        
+                                    </form> 
+                                    <button mat-raised-button color="primary" *ngIf="supplierUpdateButton" (click)="updateSupplier()" >Update Supplier</button>&nbsp;
+                                    <button mat-raised-button color="primary" *ngIf="resetButton" (click)="reset()"><mat-icon>verified_user</mat-icon></button>       
                                 </mat-card> 
                     </mat-tab>
                     <mat-tab label="Supplier List">
-                            <mat-card fxFlex="100%" fxFlex.xs="100%">
-                                    <mat-card-title>Supplier List</mat-card-title>
+                            <mat-card fxFlex="100%" fxFlex.xs="100%">                                    
                                     <mat-card-content>
-                                        <div fxLayout fxLayoutAlign="center center">
+                                        <div class="example-header" fxLayout="row">
                                             <mat-form-field fxFlex="40%">
-                                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                                            </mat-form-field>
+                                                <input matInput type="name" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                            </mat-form-field>                                            
                                         </div>
-                                        <div class="example-container mat-elevation-z8">
-                                            <table mat-table [dataSource]="dataSource" matSort>
+                                        <!--<div class="example-container mat-elevation-z8"> -->
+                                            <button mat-raised-button color="primary" (click)="getSupplier()">Refresh</button>&nbsp;
+                                            <mat-table [dataSource]="dataSource">
                                                     <ng-container matColumnDef="CompanyName">
                                                     <mat-header-cell *matHeaderCellDef> Company Name </mat-header-cell>
                                                     <mat-cell *matCellDef="let element" data-label="Company Name"> {{element.CompanyName}} </mat-cell>
@@ -120,40 +121,24 @@
                                                         <mat-cell *matCellDef="let element" data-label="Country"> {{element.Country}} </mat-cell>
                                                     </ng-container>                                      
                                                 
-                                                    <ng-container matColumnDef="details">
-                                                    <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
-                                                    <mat-cell *matCellDef="let element" data-label="Details">
-                                                        <button mat-icon-button color="primary" (click)="redirectToDetails(element.CustomerID)">
-                                                            <mat-icon class="mat-18">reorder</mat-icon>
-                                                        </button>
-                                                    </mat-cell>
-                                                    </ng-container>
-                                                
+                                                                                                    
                                                     <ng-container matColumnDef="update">
                                                         <mat-header-cell *matHeaderCellDef> Update </mat-header-cell>
                                                         <mat-cell *matCellDef="let element" data-label="Update">
-                                                        <button mat-icon-button color="accent" (click)="redirectToUpdate(element.CustomerID)">
+                                                        <button mat-icon-button color="accent" (click)="redirectToUpdate(element)">
                                                             <mat-icon class="mat-18">system_update</mat-icon>
                                                         </button>
                                                         </mat-cell>
                                                     </ng-container>
                                                 
-                                                    <ng-container matColumnDef="delete">
-                                                        <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
-                                                        <mat-cell *matCellDef="let element" data-label="Delete">
-                                                            <button mat-icon-button color="warn" (click)="redirectToDelete(element.CustomerID)">
-                                                                <mat-icon class="mat-18">delete</mat-icon>
-                                                            </button>
-                                                        </mat-cell>
-                                                        </ng-container>
-                                                
+                                                                      
                                                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                                                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                                                </table>
+                                                </mat-table>
                                             <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
                                                 [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
                                             </mat-paginator>
-                                        </div>
+                                        <!-- </div> -->
                                     </mat-card-content>      
                                 </mat-card>
                         </mat-tab>
@@ -163,5 +148,5 @@
                 </mat-tab-group>
         </mat-card-content>
     </mat-card>         
-    
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
 </section>

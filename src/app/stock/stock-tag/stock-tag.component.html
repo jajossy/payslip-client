@@ -5,7 +5,7 @@
             <mat-card-title>Company Stock Tag - Enter and list all Stock Tags</mat-card-title>
             <mat-card-content>
 
-         <mat-tab-group>
+         <mat-tab-group [(selectedIndex)]="selected">
             <mat-tab label="Enter Company Stock Tag"> 
                     <mat-card fxFlex="300px" fxFlex.xs="100%">
                             <mat-card-title>Enter Company Stock Tag</mat-card-title>
@@ -45,9 +45,11 @@
                     
                                 </mat-card-content>
                                 <mat-card-actions>
-                                    <button mat-raised-button color="primary" [disabled]="!tagForm.valid">Tag Stock</button>
+                                    <button mat-raised-button color="primary" *ngIf="tagSaveButton" [disabled]="!tagForm.valid">Save Stock Tag</button>
                                 </mat-card-actions>
-                            </form>                
+                            </form> 
+                                    <button mat-raised-button color="primary" *ngIf="tagUpdateButton" (click)="updateTag()" >Update Tag</button>&nbsp;
+                                    <button mat-raised-button color="primary" *ngIf="resetButton" (click)="reset()"><mat-icon>verified_user</mat-icon></button>               
                         </mat-card> 
             </mat-tab>
             <mat-tab label="Company Stock Tag List">
@@ -60,7 +62,8 @@
                                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                                     </mat-form-field>
                                 </div>
-                                <table mat-table [dataSource]="dataSource" matSort>
+                                <button mat-raised-button color="primary" (click)="getCompanyTag()">Refresh</button>&nbsp;
+                                <mat-table [dataSource]="dataSource" matSort>
                                         <ng-container matColumnDef="Stockname">
                                           <mat-header-cell *matHeaderCellDef> Stock Name </mat-header-cell>>
                                           <mat-cell *matCellDef="let element"  data-label="Stock Name"> {{element.Stockname}} </mat-cell>>
@@ -78,36 +81,18 @@
                                 
                                              
                                        
-                                        <ng-container matColumnDef="details">
-                                          <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>>
-                                          <mat-cell *matCellDef="let element" data-label="Details">
-                                            <button mat-icon-button color="primary" (click)="redirectToDetails(element.CustomerID)">
-                                                <mat-icon class="mat-18">reorder</mat-icon>
-                                            </button>
-                                          </mat-cell>
-                                        </ng-container>
-                                       
                                         <ng-container matColumnDef="update">
-                                            <mat-header-cell *matHeaderCellDef> Update </mat-header-cell>>
-                                            <mat-cell *matCellDef="let element" data-label="Update">
-                                              <button mat-icon-button color="accent" (click)="redirectToUpdate(element.CustomerID)">
-                                                  <mat-icon class="mat-18">system_update</mat-icon>
-                                              </button>
-                                            </mat-cell>>
-                                          </ng-container>
-                                       
-                                          <ng-container matColumnDef="delete">
-                                              <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>>
-                                              <mat-cell *matCellDef="let element" data-label="delete">
-                                                <button mat-icon-button color="warn" (click)="redirectToDelete(element.CustomerID)">
-                                                    <mat-icon class="mat-18">delete</mat-icon>
+                                                <mat-header-cell *matHeaderCellDef> Update </mat-header-cell>
+                                                <mat-cell *matCellDef="let element" data-label="Update">
+                                                <button mat-icon-button color="accent" (click)="redirectToUpdate(element)">
+                                                    <mat-icon class="mat-18">system_update</mat-icon>
                                                 </button>
-                                              </mat-cell>>
+                                                </mat-cell>
                                             </ng-container>
                                        
                                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>>
                                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>>
-                                      </table>
+                                      </mat-table>
                                       <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
                                           [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
                                       </mat-paginator>
@@ -117,5 +102,6 @@
                 </mat-tab>            
         </mat-tab-group>
     </mat-card-content>
-</mat-card>      
+</mat-card>
+<mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>      
 </section>

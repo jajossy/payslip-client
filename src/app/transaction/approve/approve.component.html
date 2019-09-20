@@ -18,7 +18,7 @@
             
                     <ng-container matColumnDef="CustomerId">
                         <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>>
-                        <mat-cell *matCellDef="let element" data-label="Customer"> {{element.CustomerId}} </mat-cell>
+                        <mat-cell *matCellDef="let element" data-label="Customer"> {{element.Customer.Storename}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="TotalOrderAmount">
@@ -38,17 +38,26 @@
                     
                     <ng-container matColumnDef="AgentId">
                         <mat-header-cell *matHeaderCellDef> Agent </mat-header-cell>
-                        <mat-cell *matCellDef="let element" data-label="Agent"> {{element.AgentId}} </mat-cell>
+                        <mat-cell *matCellDef="let element" data-label="Agent"> {{element.FieldAgent.Surname}} </mat-cell>
                     </ng-container>
                    
                     <ng-container matColumnDef="view">
                       <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
                       <mat-cell *matCellDef="let element" data-label="view">
-                        <button mat-icon-button color="primary" (click)="viewItems(element)">
+                        <button mat-icon-button color="primary" (click)="viewItems(element)" [disabled]="!element.Pending">
                             <mat-icon class="mat-18">more_horiz</mat-icon>
                         </button>
                       </mat-cell>
-                    </ng-container>                  
+                    </ng-container>   
+                    
+                    <ng-container matColumnDef="print">
+                        <mat-header-cell *matHeaderCellDef> Print </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="print">
+                            <button mat-icon-button color="primary" (click)="viewReport(element.id)" [disabled]="!element.Approved">
+                                <mat-icon class="mat-18">print</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
                     
                    
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

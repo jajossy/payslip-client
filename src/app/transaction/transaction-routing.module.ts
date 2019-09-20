@@ -12,9 +12,9 @@ import { AuthGuard } from '../helpers/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full'},
   { path: 'transaction', component: TransactionComponent, canActivate: [AuthGuard], children: [    
-    { path: 'order', component: OrderComponent, canActivate: [AuthGuard] },
-    { path: 'approve', component: ApproveComponent, canActivate: [AuthGuard] },
-    { path: 'realstock', component: RealStockComponent, canActivate: [AuthGuard] },   
+    { path: 'order', component: OrderComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'agent']}  },
+    { path: 'approve', component: ApproveComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'account']} },
+    { path: 'realstock', component: RealStockComponent, canActivate: [AuthGuard], data: { role : ['superadmin', 'manager', 'account', 'operation','admin']} },   
   ] }
 ];
 

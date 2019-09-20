@@ -100,7 +100,7 @@ export class StockDialogComponent implements OnInit {
         Comment : this.Comment,
         stockExist : this.stockExistState
       }
-      this.dialogRef.close(this.alteredStock);
+      this.dialogRef.close(this.alteredStock);      
     }
     
   }

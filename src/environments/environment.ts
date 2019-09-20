@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  //urlAddress: 'http://service.suitroh.com',
+  //urlAddress: 'http://service.suitroh.com'
   urlAddress: 'http://localhost:50029'
 };
 

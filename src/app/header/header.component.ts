@@ -14,18 +14,19 @@ export class HeaderComponent implements OnInit {
 
   @Output() public sidenavToggle = new EventEmitter();
 
-  constructor(private authenticationService: AuthenticationService) { }
-
-  ngOnInit() {
-    if(localStorage.getItem('suitrohUser') != null)
-    {
+  constructor(private authenticationService: AuthenticationService) { 
+    
       this.authenticationService.currentUser.subscribe(x => {
         this.currentUser = x;
-        this.username = this.currentUser.username
+        if(this.currentUser != null){
+          this.username = this.currentUser.username
+        }        
       });
       console.log(this.currentUser);
-    }
     
+  }
+
+  ngOnInit() {   
   }
 
   public onToggleSidenav = () => {
@@ -33,7 +34,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public onLogout = () => {
-    this.authenticationService.logout();
+    this.authenticationService.logout();    
   }
 
 }

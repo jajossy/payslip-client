@@ -9,6 +9,7 @@ import { MatTableDataSource, MatPaginator, MatDialog} from '@angular/material';
 import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/success-dialog.component';
 import { ErrorDialogComponent } from '../../shared/dialogs/error-dialog/error-dialog.component';
 import { ProgressService } from './../../progress.service';
+import { AuthenticationService } from '../../authentication.service';
 
 @Component({
   selector: 'app-agent',
@@ -17,6 +18,11 @@ import { ProgressService } from './../../progress.service';
 })
 export class AgentComponent implements OnInit {
   showProgress: boolean;
+  selected : number;
+  agentSaveButton : boolean = true;
+  agentUpdateButton : boolean = false;
+  resetButton: boolean  = true;
+
   // form varaibles
   public agentForm: FormGroup;
   gender: Gender;
@@ -26,11 +32,13 @@ export class AgentComponent implements OnInit {
   StateId : number;
   GenderId: string;
 
+  fieldAgentUpdate : FieldAgent;
+
   // table variables
   allagents: FieldAgent[];
   public array: any;
   public displayedColumns = ['Surname', 'Firstname', 'Othernames', 'AllocatedZone', 'Country',
-                              'details', 'update', 'delete'];
+                             'update'];
 
   public dataSource = new MatTableDataSource<FieldAgent>();
 
@@ -46,7 +54,8 @@ export class AgentComponent implements OnInit {
  
 
   constructor(private repoService: RepositoryService, private dialog: MatDialog,
-              private progressService: ProgressService) { }
+              private progressService: ProgressService,
+              private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     this.initializeForm();
@@ -63,9 +72,9 @@ export class AgentComponent implements OnInit {
       GenderId: new FormControl('', [Validators.required]),
       AllocatedZone: new FormControl(''),
       Remark: new FormControl(''),      
-      CountryId: new FormControl('', [Validators.required]),
-      StateId: new FormControl('', [Validators.required])
-      
+      CountryId: new FormControl(''),
+      StateId: new FormControl(''),
+      CreatedUser: new FormControl('')
     });
   }
 
@@ -126,6 +135,10 @@ export class AgentComponent implements OnInit {
     }    
   }
 
+  public reset() : void{
+    this.agentSaveButton = true;    
+  }
+
   public handlePage(e: any) {
     this.currentPage = e.pageIndex;
     this.pageSize = e.pageSize;
@@ -153,5 +166,59 @@ export class AgentComponent implements OnInit {
     const part = this.array.slice(start, end);
     this.dataSource = part;
   }  
+
+  public redirectToUpdate(agent){
+    this.getState(agent.CountryId);
+    this.agentUpdateButton = true;
+    this.agentSaveButton = false;
+    this.resetButton = false;
+    this.selected = 0;
+    this.fieldAgentUpdate = agent;    
+    this.agentForm = new FormGroup({      
+      Surname : new FormControl(agent.Surname, [Validators.required]),
+      Firstname : new FormControl(agent.Firstname, [Validators.required]),
+      Othernames : new FormControl(agent.Othernames),
+      GenderId : new FormControl(agent.GenderId, [Validators.required]),
+      AllocatedZone : new FormControl(agent.AllocatedZone),
+      Remark : new FormControl(agent.Remark),
+      //Status : new FormControl(agent.Status),
+      CountryId : new FormControl(agent.CountryId),
+      StateId : new FormControl(agent.StateId)            
+    });
+    console.log(agent);    
+  }
+
+  public updateAgent(){
+    this.fieldAgentUpdate.Surname = this.agentForm.controls["Surname"].value;    
+    this.fieldAgentUpdate.Firstname = this.agentForm.controls["Firstname"].value;
+    this.fieldAgentUpdate.Othernames = this.agentForm.controls["Othernames"].value;
+    this.fieldAgentUpdate.GenderId = this.agentForm.controls["GenderId"].value;    
+    this.fieldAgentUpdate.AllocatedZone = this.agentForm.controls["AllocatedZone"].value;
+    this.fieldAgentUpdate.Remark = this.agentForm.controls["Remark"].value;
+    this.fieldAgentUpdate.CountryId = this.agentForm.controls["CountryId"].value;
+    this.fieldAgentUpdate.StateId = this.agentForm.controls["StateId"].value;
+    this.fieldAgentUpdate.CreatedUser =  this.authenticationService.currentUserValue.UserId;
+    console.log(this.fieldAgentUpdate); 
+    this.agentUpdateButton = false // disable update button  
+    
+    this.repoService.UPDATE(this.fieldAgentUpdate, `api/Agent/Put`)
+      .subscribe(res => {                 
+        console.log(res)
+          let dialogRef = this.dialog.open(SuccessDialogComponent, {
+            width: '250px',
+            disableClose: true,
+            data: {message: "User Successfully Updated"}
+          });
+          dialogRef.afterClosed()
+          .subscribe(result => {
+            console.log("closed"); 
+            this.initializeForm();           
+            //this.supplierSaveButton = true;
+            this.selected = 1;
+          });
+          this.getAgent();
+          this.resetButton = true;
+      });
+  }
 
 }

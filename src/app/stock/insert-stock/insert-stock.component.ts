@@ -146,7 +146,7 @@ export class InsertStockComponent implements OnInit {
         }
         else if(stockInData.stockExist == true)
         {
-          alert('stock exist');
+          //alert('stock exist');
           this.checkCurrentStock(stockInData.CompanyProductNameId, stockInData);          
         }
            
@@ -165,11 +165,11 @@ export class InsertStockComponent implements OnInit {
             this.currentStock.Quantity = this.stockAddUp;
             this.currentStock.CompanyUnitPrice = dataset.SetCompanyPrice;
 
-            this.currentStock.ReorderLevel = dataset.ReorderLevel
-            this.currentStock.PackUnit = dataset.PackUnit
-            this.currentStock.SupplierUnitPrice = dataset.SupplierUnitPrice
-            this.currentStock.Status = dataset.Status
-            this.currentStock.Comment = dataset.Comment
+            this.currentStock.ReorderLevel = dataset.reorderLevel;
+            this.currentStock.PackUnit = dataset.PackUnit;
+            this.currentStock.SupplierUnitPrice = dataset.UnitPrice;
+            this.currentStock.Status = dataset.Status;
+            this.currentStock.Comment = dataset.Comment;
           
             this.repoService.UPDATE(this.currentStock, `api/CurrentStock/Put`)
             .subscribe(res => {                 

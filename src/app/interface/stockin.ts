@@ -5,7 +5,7 @@ export interface StockIn {
     id : string;
     CompanyProductNameId : string;
     SupplierId : string;
-    SupplierProductName	: string;
+    SupplierProductName? : string;
     SuppliedPrice? : number;
     UnitPrice : number;
     QuantitySupplied : number;

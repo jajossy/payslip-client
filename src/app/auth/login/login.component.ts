@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RepositoryService } from './../../repository.service';
+import { ProgressService } from './../../progress.service';
 
 import { MatTableDataSource, MatPaginator} from '@angular/material';
 import { AuthenticationService } from '../../authentication.service';
@@ -17,17 +18,34 @@ import { Login } from '../login';
 export class LoginComponent implements OnInit {  
 
   public loginForm: FormGroup;
+  returnUrl: string;
+  showProgress: boolean;
 
   constructor(private repoService: RepositoryService,
               private authenticationService: AuthenticationService,
-              private router: Router) { }
+              private route: ActivatedRoute,
+              private progressService: ProgressService,
+              private router: Router) { 
+                // redirect to home if already logged in
+                  if (this.authenticationService.currentUserValue) { 
+                    this.router.navigate(['/home']);
+                }
+              }
 
   ngOnInit() {
+    
+    /*if(localStorage.getItem('suitrohUser') != null)
+    {      
+      window.location.reload();
+    }*/
 
     this.loginForm = new FormGroup({
       username: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      password: new FormControl('', [Validators.required, Validators.maxLength(6)])
+      password: new FormControl('', [Validators.required, Validators.maxLength(8)])
     });
+
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
     
   }  
 
@@ -49,10 +67,11 @@ export class LoginComponent implements OnInit {
     let model = "username=" + loginFormValue.username + "&password=" + loginFormValue.password + "&grant_type=" + "password";
     this.authenticationService.login(model)
     .subscribe(res => {
+      //this.router.navigate(['/home']);      
+      
+      console.log(res);
+      //this.router.navigate([this.returnUrl]);
       this.router.navigate(['/home']);
-      //console.log(res);
-      //var decode = jwt_decode(localStorage.getItem('suitrohUser'));
-      //console.log(decode);
     },
     error => {
       console.log(error);

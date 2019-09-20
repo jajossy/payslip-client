@@ -5,6 +5,7 @@ import { RepositoryService } from './../../repository.service';
 import { ProgressService } from './../../progress.service';
 import { MatTableDataSource, MatPaginator, MatDialog} from '@angular/material';
 import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/success-dialog.component';
+import { AuthenticationService } from '../../authentication.service';
 
 
 @Component({
@@ -15,7 +16,10 @@ import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/succ
 export class StockTagComponent implements OnInit {
   
   showProgress: boolean;
-
+  selected : number;
+  tagSaveButton : boolean = true;
+  tagUpdateButton : boolean = false;
+  resetButton: boolean  = true;
 
   // form varaibles
   public tagForm: FormGroup;
@@ -23,10 +27,12 @@ export class StockTagComponent implements OnInit {
   CountryId : number;
   StateId : number;
 
+  companyStockTagUpdate : CompanyStockTag;
+
   // table variables
   allStockTag: CompanyStockTag[];
   public array: any;  
-  public displayedColumns = ['Stockname', 'CompanyPrice', 'Comment','details', 'update', 'delete'];
+  public displayedColumns = ['Stockname', 'CompanyPrice', 'Comment','update'];
   public dataSource = new MatTableDataSource<CompanyStockTag>();
 
   public pageSize = 10;
@@ -42,7 +48,8 @@ export class StockTagComponent implements OnInit {
 
   constructor(private repoService: RepositoryService,
                private progressService: ProgressService,
-               private dialog: MatDialog) { }
+               private dialog: MatDialog,
+               private authenticationService: AuthenticationService) { }
 
   ngOnInit() {    
     this.initializeForm(); 
@@ -55,7 +62,8 @@ export class StockTagComponent implements OnInit {
     this.tagForm = new FormGroup({      
       Stockname: new FormControl('', [Validators.required]),
       CompanyPrice: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),      
-      Comment: new FormControl('', [Validators.required, Validators.maxLength(100)])     
+      Comment: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      CreatedUser: new FormControl('')   
     });
   }
 
@@ -66,6 +74,7 @@ export class StockTagComponent implements OnInit {
   public addTag(tagFormValue){
     console.log(tagFormValue);
     if(this.tagForm.valid){
+      this.tagSaveButton = false;
       this.repoService.POST(tagFormValue, `api/StockTag/Post`)
       .subscribe(res => {                 
         console.log(res)
@@ -77,11 +86,17 @@ export class StockTagComponent implements OnInit {
         dialogRef.afterClosed()
         .subscribe(result => {
           console.log("closed");
+          this.initializeForm();
+          this.tagSaveButton = true;
         });
         // reload Tag
         this.getCompanyTag();
       });
     }    
+  }
+
+  public reset() : void{
+    this.tagSaveButton = true;    
   }
 
   
@@ -113,6 +128,50 @@ export class StockTagComponent implements OnInit {
     const start = this.currentPage * this.pageSize;
     const part = this.array.slice(start, end);
     this.dataSource = part;
-  }  
+  } 
+  
+  public redirectToUpdate(tag){
+    
+    this.tagUpdateButton = true;
+    this.tagSaveButton = false;
+    this.resetButton = false;
+    this.selected = 0;
+    this.companyStockTagUpdate = tag;    
+    this.tagForm = new FormGroup({      
+      Stockname: new FormControl(tag.Stockname, [Validators.required]),
+      CompanyPrice: new FormControl(tag.CompanyPrice, [Validators.required, Validators.pattern("^[0-9]*$")]),      
+      Comment: new FormControl(tag.Comment, [Validators.required, Validators.maxLength(100)])        
+    });
+    console.log(tag);
+    console.log();
+  }
+
+  public updateTag(){
+    this.companyStockTagUpdate.Stockname = this.tagForm.controls["Stockname"].value;    
+    this.companyStockTagUpdate.CompanyPrice = this.tagForm.controls["CompanyPrice"].value;
+    this.companyStockTagUpdate.Comment = this.tagForm.controls["Comment"].value;
+    this.companyStockTagUpdate.CreatedUser =  this.authenticationService.currentUserValue.UserId;
+    console.log(this.companyStockTagUpdate); 
+    this.tagUpdateButton = false // disable update button  
+    
+    this.repoService.UPDATE(this.companyStockTagUpdate, `api/StockTag/Put`)
+      .subscribe(res => {                 
+        console.log(res)
+          let dialogRef = this.dialog.open(SuccessDialogComponent, {
+            width: '250px',
+            disableClose: true,
+            data: {message: "Tag Successfully Updated"}
+          });
+          dialogRef.afterClosed()
+          .subscribe(result => {
+            console.log("closed"); 
+            this.initializeForm();           
+            //this.supplierSaveButton = true;
+            this.selected = 1;
+          });
+          this.getCompanyTag();
+          this.resetButton = true;
+      });
+  }
 
 }

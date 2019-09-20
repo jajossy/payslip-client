@@ -1,70 +1,118 @@
-<section>    
-        <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"
-        ></mat-progress-bar>
-    <mat-card>
-        <mat-card-title>Inventory List</mat-card-title>
+<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+<mat-card fxFlex="100%" fxFlex.xs="100%">        
         <mat-card-content>
-            <div class="example-header" fxLayout="row">
-                <mat-form-field>
-                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                </mat-form-field>
-            </div>
-            <div class="example-container mat-elevation-z8">
-                <mat-table [dataSource]="dataSource" matSort >
-                    <ng-container matColumnDef="StockName">
-                      <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
-                      <mat-cell *matCellDef="let element" data-label="product name"> {{element.CompanyStockTag.Stockname}} </mat-cell>
-                    </ng-container>
-            
-                    <ng-container matColumnDef="Quantity">
-                        <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>>
-                        <mat-cell *matCellDef="let element" data-label="Quantity"> {{element.Quantity}} </mat-cell>
-                    </ng-container>
-            
-                    <ng-container matColumnDef="ReorderLevel">
-                        <mat-header-cell *matHeaderCellDef> Reorder Level </mat-header-cell>>
-                        <mat-cell *matCellDef="let element" data-label="Reorder Level"> {{element.ReorderLevel}} </mat-cell>
-                    </ng-container>
-            
-                    <ng-container matColumnDef="PackUnit">
-                        <mat-header-cell *matHeaderCellDef> Pack Unit </mat-header-cell>>
-                        <mat-cell *matCellDef="let element" data-label="Pack Unit"> {{element.PackUnit}} </mat-cell>
-                    </ng-container>                   
-            
-                    <ng-container matColumnDef="CompanyUnitPrice">
-                        <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>
-                        <mat-cell *matCellDef="let element" data-label="Unit Price"> {{element.CompanyUnitPrice}} </mat-cell>
-                    </ng-container>
-            
-                    <ng-container matColumnDef="SupplierUnitPrice">
-                        <mat-header-cell *matHeaderCellDef> Supplier Unit Price </mat-header-cell>
-                        <mat-cell *matCellDef="let element" data-label="Supplier Unit Price"> {{element.SupplierUnitPrice}} </mat-cell>
-                    </ng-container>
-            
-                    <ng-container matColumnDef="Status"> 
-                        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                        <mat-cell *matCellDef="let element" data-label="Status"> {{element.Status}} </mat-cell>
-                    </ng-container>                                            
-                   
-                    <ng-container matColumnDef="view">
-                      <mat-header-cell *matHeaderCellDef> view </mat-header-cell>
-                      <mat-cell *matCellDef="let element" data-label="view">
-                        <button mat-icon-button color="primary" (click)="viewStock(element)">
-                            <mat-icon class="mat-18">add_shopping_cart</mat-icon>
-                        </button>
-                      </mat-cell>
-                    </ng-container>                  
-                    
-                   
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                  </mat-table>
-                  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
-                      [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
-                  </mat-paginator>
-                </div>
-            
-        </mat-card-content>      
-    </mat-card>     
-    
+            <mat-tab-group [(selectedIndex)]="selected">
+                    <mat-tab label="Inventory List">
+                            <mat-card>
+                                <mat-card-title>Inventory List</mat-card-title>
+                                <mat-card-content>
+                                    <div class="example-header" fxLayout="row">
+                                        <mat-form-field>
+                                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="example-container mat-elevation-z8">
+                                        <mat-table [dataSource]="dataSource" matSort >
+                                            <ng-container matColumnDef="StockName">
+                                              <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
+                                              <mat-cell *matCellDef="let element" data-label="product name"> {{element.CompanyStockTag.Stockname}} </mat-cell>
+                                            </ng-container>
+                                    
+                                            <ng-container matColumnDef="Quantity">
+                                                <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>>
+                                                <mat-cell *matCellDef="let element" data-label="Quantity"> {{element.Quantity}} </mat-cell>
+                                            </ng-container>
+                                    
+                                            <ng-container matColumnDef="ReorderLevel">
+                                                <mat-header-cell *matHeaderCellDef> Reorder Level </mat-header-cell>>
+                                                <mat-cell *matCellDef="let element" data-label="Reorder Level"> {{element.ReorderLevel}} </mat-cell>
+                                            </ng-container>
+                                    
+                                            <ng-container matColumnDef="PackUnit">
+                                                <mat-header-cell *matHeaderCellDef> Pack Unit </mat-header-cell>>
+                                                <mat-cell *matCellDef="let element" data-label="Pack Unit"> {{element.PackUnit}} </mat-cell>
+                                            </ng-container>                   
+                                    
+                                            <ng-container matColumnDef="CompanyUnitPrice">
+                                                <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>
+                                                <mat-cell *matCellDef="let element" data-label="Unit Price"> {{element.CompanyUnitPrice}} </mat-cell>
+                                            </ng-container>
+                                    
+                                            <ng-container matColumnDef="SupplierUnitPrice">
+                                                <mat-header-cell *matHeaderCellDef> Supplier Unit Price </mat-header-cell>
+                                                <mat-cell *matCellDef="let element" data-label="Supplier Unit Price"> {{element.SupplierUnitPrice}} </mat-cell>
+                                            </ng-container>
+                                    
+                                            <ng-container matColumnDef="Status"> 
+                                                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                                                <mat-cell *matCellDef="let element" data-label="Status"> {{element.Status}} </mat-cell>
+                                            </ng-container>                                            
+                                           
+                                            <ng-container matColumnDef="view">
+                                              <mat-header-cell *matHeaderCellDef> Adjust Price </mat-header-cell>
+                                              <mat-cell *matCellDef="let element" data-label="view">
+                                                <button mat-icon-button color="primary" (click)="updateStock(element)">
+                                                    <mat-icon class="mat-18">money_off</mat-icon>
+                                                </button>
+                                              </mat-cell>
+                                            </ng-container>                  
+                                            
+                                           
+                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                          </mat-table>
+                                          <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                                              [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                                          </mat-paginator>
+                                        </div>
+                                    
+                                </mat-card-content>      
+                            </mat-card>
+                        </mat-tab>
+                    <mat-tab label="Edit Price"> 
+                        <mat-card fxFlex="300px" fxFlex.xs="100%">
+                                <mat-card-title>Update Stock</mat-card-title>
+                                <h3>{{StockName}}</h3>
+                                <form [formGroup]="currentForm" autocomplete="off" novalidate 
+                                     fxLayout="column wrap" fxLayoutAlign="center center"
+                                    fxLayoutGap="10px">
+                                    <mat-card-content>
+                                        <mat-form-field>
+                                            <input matInput type="number" placeholder="Reorder Level" 
+                                            formControlName="ReorderLevel" id="ReorderLevel">
+                                            <mat-error *ngIf="hasError('ReorderLevel', 'required')">
+                                                Reorder Level is required
+                                            </mat-error>
+                                        </mat-form-field>
+                        
+                                        <mat-form-field>
+                                            <input matInput type="text" placeholder="Pack Unit" 
+                                            formControlName="PackUnit" id="packUnit">
+                                            <mat-error *ngIf="hasError('PackUnit', 'required')">
+                                                Pack Unit is required
+                                            </mat-error>
+                                        </mat-form-field>
+                        
+                                        <mat-form-field>
+                                            <input matInput type="number" placeholder="Company Unit Price" 
+                                            formControlName="CompanyUnitPrice" id="companyUnitPrice">
+                                            <mat-error *ngIf="hasError('CompanyUnitPrice', 'required')">
+                                                Company Unit Price is required
+                                            </mat-error>
+                                        </mat-form-field>                        
+                                        
+                        
+                                    </mat-card-content>
+                                    
+                                </form> 
+                                <button mat-raised-button color="primary" *ngIf="currentUpdateButton" (click)="updateCurrent()" >Update Inventory</button>&nbsp;
+                                <!--<button mat-raised-button color="primary" *ngIf="resetButton" (click)="reset()"><mat-icon>verified_user</mat-icon></button> -->      
+                            </mat-card>
+                </mat-tab>
+                                
+            </mat-tab-group>
+    </mat-card-content>
+</mat-card>         
+<mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
 </section>

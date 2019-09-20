@@ -7,6 +7,8 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <app-header (sidenavToggle)="sidenav.toggle()"></app-header>
+      <mat-progress-bar  mode="query" *ngIf="loading"
+      mode="indeterminate"></mat-progress-bar>
       <!-- in here all the content must reside. We will add a navigation header as well -->
       <main>
           <router-outlet></router-outlet>

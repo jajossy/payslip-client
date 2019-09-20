@@ -1,4 +1,5 @@
 <section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
   <mat-card fxFlex="300px" fxFlex.xs="100%">
       <mat-card-title>Login into Application</mat-card-title>
       <form [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="login(loginForm.value)" fxLayout="column wrap"

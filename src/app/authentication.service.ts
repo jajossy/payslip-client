@@ -14,21 +14,26 @@ export class AuthenticationService {
     public currentUser: Observable<User>;
 
     constructor(private http: HttpClient, private router: Router) {
-        if(localStorage.getItem('suitrohUser') != null)
+        
+        var token = localStorage.getItem('suitrohUser')
+        if(token != null)
         {
-        //this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('suitrohUser')));
-        var decode = jwt_decode(localStorage.getItem('suitrohUser'));
-        this.currentUserSubject = new BehaviorSubject<User>(decode);
-        this.currentUser = this.currentUserSubject.asObservable();
+            var decode = jwt_decode(token);
+            this.currentUserSubject = new BehaviorSubject<User>(decode);
+            this.currentUser = this.currentUserSubject.asObservable();
+            console.log(this.currentUserSubject);
+            console.log(this.currentUser);
         }
+        else{
+            this.currentUserSubject = new BehaviorSubject<User>(null);
+            this.currentUser = this.currentUserSubject.asObservable();
+        }
+        
+        
     }
 
-    public get currentUserValue(): User {
-        if(localStorage.getItem('suitrohUser') != null)
-        {
+    public get currentUserValue(): User {        
         return this.currentUserSubject.value;
-        }
-        return ;
     }
 
     //login(username: string, password: string){
@@ -37,21 +42,27 @@ export class AuthenticationService {
         var reqHeader = new HttpHeaders({ 'Content-Type': 'application/x-www-urlencoded','No-Auth':'True' });
         return this.http.post<any>(`${environment.urlAddress}/token`, formValue, { headers : reqHeader})
         .pipe(map(user => {
-            //console.log(user);            
             // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('suitrohUser', JSON.stringify(user)); 
-            var decode = jwt_decode(localStorage.getItem('suitrohUser'));
-            this.currentUserSubject = new BehaviorSubject<User>(decode);
-            this.currentUser = this.currentUserSubject.asObservable();          
-            this.currentUserSubject.next(user);
-            return user;
+           
+            // login successful if there's a jwt token in the response
+            if (user.access_token) {
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                
+                localStorage.setItem('suitrohUser', user.access_token);
+                console.log(localStorage.getItem('suitrohUser'));                
+                var decode = jwt_decode(user.access_token);
+                this.currentUserSubject = new BehaviorSubject<User>(decode);
+                console.log(this.currentUserSubject);        
+                this.currentUserSubject.next(decode);
+            }
+            return decode;
         }));
     }
 
     logout(){
         //remove user from local storage to log user out
         localStorage.removeItem('suitrohUser');
-        this.router.navigate(['/auth/login']);
-        //this.currentUserSubject.next(null);
+        this.currentUserSubject.next(null);
+        this.router.navigate(['/auth/login']);        
     }
 }
