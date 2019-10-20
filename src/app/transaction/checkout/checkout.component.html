@@ -42,9 +42,9 @@
                     </ng-container>
                    
                     <ng-container matColumnDef="view">
-                      <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
+                      <mat-header-cell *matHeaderCellDef> Checkout </mat-header-cell>
                       <mat-cell *matCellDef="let element" data-label="view">
-                        <button mat-icon-button color="primary" (click)="viewItems(element)" [disabled]="!element.Pending">
+                        <button mat-icon-button color="primary" (click)="viewItems(element)">
                             <mat-icon class="mat-18">more_horiz</mat-icon>
                         </button>
                       </mat-cell>
@@ -57,18 +57,6 @@
                                 <mat-icon class="mat-18">print</mat-icon>
                             </button>
                         </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="action">
-                        <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
-                            <mat-cell *matCellDef="let element"  data-label="Action" class="action-link"> 
-                                <button mat-icon-button color="primary" (click)="openDialog('Update', element)" [disabled]="!element.Pending">
-                                    <mat-icon>playlist_add</mat-icon>
-                                </button> | 
-                                <button mat-icon-button color="warn" (click)="openDialog('Delete', element)" [disabled]="!element.Pending">
-                                    <mat-icon>delete_forever</mat-icon>
-                                </button> 
-                            </mat-cell>
                     </ng-container>
                     
                    

@@ -10,4 +10,5 @@ export interface OrderItem {
     SuppliedUnitPrice : number;
     SuppliedTotalPrice : number;
     CompanyStockTag: CompanyStockTag;
+    AgentId?: string;
 }

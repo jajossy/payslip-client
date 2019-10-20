@@ -8,6 +8,7 @@ export interface User {
     token?: string;
     DateCreated: Date;
     UserId: string;
+    EmployeeId: string;
     /*access_token: string;
     expires_in: number;
     token_type: string*/

@@ -23,14 +23,18 @@ export class UserComponent implements OnInit {
   resetButton: boolean  = true;
 
   // form varaibles
-  public agentForm: FormGroup;
+  //public agentForm: FormGroup;
   public userForm: FormGroup;
 
-  RoleId: string
-  //UserId : string;
-  User: FieldAgent;
+  role: string
+  UserId : string;
+  //User: FieldAgent;
 
-  role : Role[] = [ 
+  selectUser: boolean = false;
+  selectUsername: boolean = false;
+  selectRole: boolean = false;
+
+  roleValue : Role[] = [ 
     {id : "admin", Description : 'Admin' },
     {id : "account", Description : 'Account' },
     {id : "operation", Description : 'Operation' },
@@ -42,6 +46,7 @@ export class UserComponent implements OnInit {
    Agent: FieldAgent;
   // table variables
   allagents: FieldAgent[];
+  singleAgent: FieldAgent;
   public array: any;
   /*public displayedColumns = ['Surname', 'Firstname', 'Othernames', 'AllocatedZone', 'Country',
                               'details', 'update', 'delete'];*/
@@ -72,6 +77,7 @@ export class UserComponent implements OnInit {
                 if(currentUser.role != "superadmin"){
                   this.userSaveButton = false;
                   this.resetButton = false;
+                  this.selectRole = true;
                 }
               }
 
@@ -89,7 +95,7 @@ export class UserComponent implements OnInit {
       password: new FormControl('', [Validators.required]),
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
-      RoleId: new FormControl('')            
+      role: new FormControl('')            
     });
   }  
 
@@ -97,9 +103,13 @@ export class UserComponent implements OnInit {
     return this.userForm.controls[controlName].hasError(errorName);
   }
 
-  public addUser(agentFormValue){    
+  public addUser(userFormValue){ 
+    console.log(userFormValue);
     if(this.userForm.valid){
-      this.repoService.POST(agentFormValue, `api/User/Post`)
+      this.userSaveButton = false;
+      userFormValue.UserId = this.UserId
+      userFormValue.CreatedUser = this.authenticationService.currentUserValue.UserId;
+      this.repoService.POST(userFormValue, `api/User/Post`)
       .subscribe(res => {
         let dialogRef = this.dialog.open(SuccessDialogComponent, {
           width: '250px',
@@ -107,7 +117,9 @@ export class UserComponent implements OnInit {
           data: {message: "User Added Successfully"}
         });                 
         console.log(res)
-        //this.getAgent();
+        this.initializeUserForm();           
+        this.userSaveButton = true; 
+        this.getUser();
       }, 
       (error) =>{
         console.log(error);
@@ -117,7 +129,7 @@ export class UserComponent implements OnInit {
           data: {message: "Error in Saving User"}
         });
       });
-    }    
+    } 
   }
 
   public reset() : void{
@@ -157,88 +169,51 @@ export class UserComponent implements OnInit {
 
   public getAgent(): void {
     const currentUser = this.authenticationService.currentUserValue;
-    var id = currentUser.UserId
+    var id = currentUser.EmployeeId
       if(currentUser.role != "superadmin"){    
         this.repoService.GetByUnique(id, `api/Agent/GetById`)
           .subscribe(agent => {
-                this.Agent = agent;  
+                this.Agent = agent;
+                this.allagents = agent;                  
             console.log(agent)
           });
         }
         else{
           this.repoService.GetAll("api/Agent/Get")
           .subscribe(agent => {
-                this.Agent = agent;  
+                this.Agent = agent;
+                this.allagents = agent;   
             console.log(agent)
           });
         }
   }
 
-  public fillEmployee(agent){
-    
-    console.log(agent.id);
+  public fillEmployee(agent){    
+    console.log(this.allagents);
+    this.singleAgent =  this.allagents.filter(x => x.id == agent)[0];
+        
     this.userForm = new FormGroup({   
-      UserId: new FormControl('', [Validators.required]),         
+      UserId: new FormControl(this.singleAgent.id, [Validators.required]),         
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
-      firstName: new FormControl(agent.Firstname, [Validators.required]),
-      lastName: new FormControl(agent.Surname, [Validators.required]),
-      RoleId: new FormControl('')
+      firstName: new FormControl(this.singleAgent.Firstname, [Validators.required]),
+      lastName: new FormControl(this.singleAgent.Surname, [Validators.required]),
+      role: new FormControl('')
     });
-  }
-  
-  /*public addAgent(agentFormValue){
-    console.log(agentFormValue);
-    if(this.agentForm.valid){
-      this.repoService.POST(agentFormValue, `api/Agent/Post`)
-      .subscribe(res => {
-        let dialogRef = this.dialog.open(SuccessDialogComponent, {
-          width: '250px',
-          disableClose: true,
-          data: {message: "Agent Added Successfully"}
-        });                 
-        console.log(res)
-        this.getAgent();
-      }, 
-      (error) =>{
-        console.log(error);
-        let dialogRef = this.dialog.open(ErrorDialogComponent, {
-          width: '250px',
-          disableClose: true,
-          data: {message: "Error in Saving Agent"}
-        });
-      });
-    }    
-  }*/
+  }    
 
   public handlePage(e: any) {
     this.currentPage = e.pageIndex;
     this.pageSize = e.pageSize;
     this.iterator();
-  }
-
-  
-  /*public getAgent(): void {
-    
-    this.repoService.GetAll(`api/Agent/Get`)
-      .subscribe(supplier => {
-        this.dataSource.data = supplier
-        this.dataSource = new MatTableDataSource<FieldAgent>(supplier);
-        this.dataSource.paginator = this.paginator;
-        this.array = supplier;
-        this.totalSize = this.array.length;
-        this.iterator();
-        console.log(supplier)
-      });
-  }*/
-
+  }  
+ 
   private iterator() {
     const end = (this.currentPage + 1) * this.pageSize;
     const start = this.currentPage * this.pageSize;
     const part = this.array.slice(start, end);
     this.dataSource = part;
   } 
-
   
   public redirectToUpdate(user){
     
@@ -246,26 +221,31 @@ export class UserComponent implements OnInit {
     this.userSaveButton = false;
     this.resetButton = false;
     this.selected = 0;
-    this.userUpdate = user;    
+    this.userUpdate = user; 
+    this.selectUser = true;
+    this.selectUsername = true;
+    if(this.authenticationService.currentUserValue.role == "superadmin"){
+        this.selectRole = true;
+    }       
     this.userForm = new FormGroup({   
       UserId: new FormControl(user.UserId, [Validators.required]),         
       username: new FormControl(user.username, [Validators.required]),
       password: new FormControl(user.password, [Validators.required]),
       firstName: new FormControl(user.firstName, [Validators.required]),
       lastName: new FormControl(user.lastName, [Validators.required]),
-      RoleId: new FormControl(user.RoleId)      
+      role: new FormControl(user.role)      
     });
 
-    console.log(user); 
+    console.log(user.UserId); 
   }
 
-  public updateAgent(){
-    this.userUpdate.username = this.agentForm.controls["username"].value;    
-    this.userUpdate.password = this.agentForm.controls["password"].value;
-    this.userUpdate.firstName = this.agentForm.controls["firstName"].value;
-    this.userUpdate.lastName = this.agentForm.controls["lastName"].value;
-    this.userUpdate.role = this.agentForm.controls["RoleId"].value;
-    this.userUpdate.UserId =  this.User.id
+  public updateUser(){
+    this.userUpdate.username = this.userForm.controls["username"].value;    
+    this.userUpdate.password = this.userForm.controls["password"].value;
+    this.userUpdate.firstName = this.userForm.controls["firstName"].value;
+    this.userUpdate.lastName = this.userForm.controls["lastName"].value;
+    this.userUpdate.role = this.userForm.controls["role"].value;
+    this.userUpdate.UserId =  this.userForm.controls["UserId"].value;
     console.log(this.userUpdate); 
     this.userUpdateButton = false // disable update button  
     

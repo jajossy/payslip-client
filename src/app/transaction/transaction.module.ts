@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OrderComponent } from './order/order.component';
 import { ApproveComponent } from './approve/approve.component';
 import { RealStockComponent } from './realstock/realstock.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 import { TransactionComponent } from './transaction.component';
 
 
@@ -17,7 +18,8 @@ import { TransactionComponent } from './transaction.component';
                   OrderComponent,
                   ApproveComponent,
                   TransactionComponent,
-                  RealStockComponent
+                  RealStockComponent,
+                  CheckoutComponent
                 ],
   imports: [
     CommonModule,

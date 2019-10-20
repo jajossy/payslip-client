@@ -9,8 +9,12 @@ export interface Order {
     Pending? : boolean;
     Cancelled? : boolean;
     TotalOrderAmount : number;
-    TotalSuppliedAmount? : number;
+    TotalSuppliedAmount : number;
     DateCreated	: Date;
     FieldAgent : FieldAgent;
+    CkeckOut: string;
+    ApprovalId?: string;
+    CheckerId?: string;
     Customer : Customer;
+    
 }

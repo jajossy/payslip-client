@@ -16,14 +16,14 @@
                                         <mat-card-content>
                                             <mat-form-field>
                                                 <mat-label>Employee</mat-label>
-                                                <mat-select placeholder="Choose Employee" formControlName="UserId" [(ngModel)]="User"
-                                                (selectionChange)="fillEmployee(User)">                      
-                                                <mat-option *ngFor="let ag of Agent" [value]="ag">{{ag.Surname}}&nbsp;{{ag.Firstname}}</mat-option>
+                                                <mat-select placeholder="Choose Employee" formControlName="UserId" [(ngModel)]="UserId"
+                                                (selectionChange)="fillEmployee(UserId)" [disabled]="selectUser">                      
+                                                <mat-option *ngFor="let ag of Agent" [value]="ag.id">{{ag.Surname}}&nbsp;{{ag.Firstname}}</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                             <mat-form-field>
                                                 <input matInput type="text" placeholder="Username" 
-                                                formControlName="username" id="username">
+                                                formControlName="username" id="username" [disabled]="selectUsername">
                                                 <mat-error *ngIf="hasError('username', 'required')">
                                                     username is required
                                                 </mat-error>
@@ -50,8 +50,8 @@
                             
                                             <mat-form-field>
                                                 <mat-label>Role</mat-label>
-                                                <mat-select placeholder="Choose Role" formControlName="RoleId" [(ngModel)]="RoleId">                      
-                                                <mat-option *ngFor="let rl of role" [value]="rl.id">{{rl.Description}}</mat-option>
+                                                <mat-select placeholder="Choose Role" formControlName="role" [(ngModel)]="role" [disabled]="selectRole">                      
+                                                <mat-option *ngFor="let rl of roleValue" [value]="rl.id">{{rl.Description}}</mat-option>
                                                 </mat-select>
                                             </mat-form-field> 
                                             

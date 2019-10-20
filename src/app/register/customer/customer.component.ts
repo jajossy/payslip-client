@@ -78,7 +78,8 @@ export class CustomerComponent implements OnInit {
       CustomerEmail: new FormControl(''),
       Remark: new FormControl(''),    
       CountryId: new FormControl(''),
-      StateId: new FormControl('')
+      StateId: new FormControl(''),
+      CreatedUser: new FormControl('')
     });   
         
   }
@@ -96,11 +97,13 @@ export class CustomerComponent implements OnInit {
   }
 
   getState(id: number){
-    this.repoService.GetAll(`api/State/Get/${id}`)
-    .subscribe(state => {
-      this.states = state;            
-      console.log(state)
-    });
+    if(id != null){
+      this.repoService.GetAll(`api/State/Get/${id}`)
+      .subscribe(state => {
+        this.states = state;            
+        console.log(state)
+      });
+    }
   }
 
   getGender(){
@@ -112,13 +115,15 @@ export class CustomerComponent implements OnInit {
   }
 
   fillState(CountryId){
-    alert(CountryId);
+    //alert(CountryId);
     this.getState(CountryId);
   }
 
   public addCustomer(customerFormValue){
     console.log(customerFormValue);
     if(this.customerForm.valid){
+      this.customerSaveButton = false;
+      customerFormValue.CreatedUser = this.authenticationService.currentUserValue.UserId;
       this.repoService.POST(customerFormValue, `api/Customer/Post`)
       .subscribe(res => {                 
         console.log(res)
@@ -126,7 +131,9 @@ export class CustomerComponent implements OnInit {
           width: '250px',
           disableClose: true,
           data: {message: "Customer Added Successfully"}
-        }); 
+        });
+        this.initializeForm();           
+        this.customerSaveButton = true; 
         this.getCustomer();                
         console.log(res)
       });

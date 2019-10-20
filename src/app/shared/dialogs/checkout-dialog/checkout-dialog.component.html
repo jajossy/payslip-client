@@ -1,0 +1,71 @@
+<section fxLayout="column" fxLayoutAlign="center">    
+    
+    <mat-dialog-content>
+            <section>    
+                    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"
+                    ></mat-progress-bar>
+                <mat-card>
+                    <mat-card-title>Order List for Approval</mat-card-title>
+                    <mat-card-content>
+                        <div class="example-container mat-elevation-z8">
+                            <mat-table [dataSource]="dataSource" matSort >
+                                <ng-container matColumnDef="ProductId">
+                                  <mat-header-cell *matHeaderCellDef> Product </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" data-label="Product"> {{element.CompanyStockTag.Stockname}} </mat-cell>
+                                </ng-container>
+                        
+                                <ng-container matColumnDef="Quantity">
+                                    <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>>
+                                    <mat-cell *matCellDef="let element" data-label="Quantity"> {{element.Quantity}} </mat-cell>
+                                </ng-container>
+                        
+                                <ng-container matColumnDef="SalesUnitPrice">
+                                    <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>>
+                                    <mat-cell *matCellDef="let element" data-label="Unit Price"> {{element.SalesUnitPrice}} </mat-cell>
+                                </ng-container>
+                        
+                                <ng-container matColumnDef="SalesTotalAmount">
+                                    <mat-header-cell *matHeaderCellDef> Total Amount </mat-header-cell>>
+                                    <mat-cell *matCellDef="let element" data-label="Date Created"> {{element.SalesTotalAmount}} </mat-cell>
+                                </ng-container>                   
+                        
+                                <ng-container matColumnDef="OrderId">
+                                    <mat-header-cell *matHeaderCellDef> OrderId </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" data-label="OrderId"> {{element.Order.OrderTag}} </mat-cell>
+                                </ng-container>  
+                                
+                                <ng-container matColumnDef="BatchNo">
+                                    <mat-header-cell *matHeaderCellDef> Batch No </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" data-label="BatchNo"> {{element.BatchNo}} </mat-cell>
+                                </ng-container>
+                               
+                                <!-- <ng-container matColumnDef="view">
+                                  <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" data-label="view">
+                                    <button mat-icon-button color="primary" (click)="viewItems(element)">
+                                        <mat-icon class="mat-18">more_horiz</mat-icon>
+                                    </button>
+                                  </mat-cell>
+                                </ng-container> -->                 
+                                
+                               
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                              </mat-table>
+                              <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                                  [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                              </mat-paginator>
+                            </div>
+                        
+                    </mat-card-content>      
+                </mat-card>     
+                
+            </section>
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" [mat-dialog-close]="true">Cancel</button>
+        <button mat-raised-button color="primary" (click)="closeDialog()" >Checkout</button>
+    </mat-dialog-actions>
+</section>
+

@@ -99,21 +99,25 @@ export class AgentComponent implements OnInit {
   }
 
   getState(id: number){
-    this.repoService.GetAll(`api/State/Get/${id}`)
+    if(id != null){
+      this.repoService.GetAll(`api/State/Get/${id}`)
     .subscribe(state => {
       this.states = state;            
       console.log(state)
     });
+    }    
   }
 
   fillState(CountryId){
-    alert(CountryId);
+    //alert(CountryId);
     this.getState(CountryId);
   }
 
   public addAgent(agentFormValue){
     console.log(agentFormValue);
     if(this.agentForm.valid){
+      this.agentSaveButton = false;
+      agentFormValue.CreatedUser = this.authenticationService.currentUserValue.UserId;
       this.repoService.POST(agentFormValue, `api/Agent/Post`)
       .subscribe(res => {
         let dialogRef = this.dialog.open(SuccessDialogComponent, {
@@ -122,6 +126,8 @@ export class AgentComponent implements OnInit {
           data: {message: "Agent Added Successfully"}
         });                 
         console.log(res)
+        this.initializeForm();           
+        this.agentSaveButton = true;
         this.getAgent();
       }, 
       (error) =>{

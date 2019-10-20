@@ -1,3 +1,4 @@
+
 export interface FieldAgent {
     id : string;
     Surname : string;
@@ -10,5 +11,5 @@ export interface FieldAgent {
     CountryId : number;
     StateId : number;
     CreatedUser? : string;
-    DateCreated : Date;
+    DateCreated : Date;    
 }

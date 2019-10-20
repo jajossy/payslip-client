@@ -12,6 +12,7 @@ import { SuccessDialogComponent } from '../../shared/dialogs/success-dialog/succ
 import { ErrorDialogComponent } from '../../shared/dialogs/error-dialog/error-dialog.component';
 import { InputDialogComponent } from '../../shared/dialogs/input-dialog/input-dialog.component';
 import { ProgressService } from './../../progress.service';
+import { AuthenticationService } from '../../authentication.service';
 
 
 @Component({
@@ -48,11 +49,13 @@ export class OrderComponent implements OnInit {
   paymentType : payment[] = [
     { 'id' : 1, 'Description': 'Cash'},
     { 'id' : 2, 'Description': 'Cheque'},
+    { 'id' : 3, 'Description': 'Barter'}
   ]
   @ViewChild(MatTable, {static: false}) table: MatTable<any>;
 
   constructor(private repoService: RepositoryService, private dialog: MatDialog,
-              public progressService: ProgressService) { }
+              public progressService: ProgressService,
+              private authenticationService: AuthenticationService) { }
 
   ngOnInit() {  
     this.initializeForm();  
@@ -128,19 +131,7 @@ export class OrderComponent implements OnInit {
     
   }
 
-  /*public handlePage(e: any) {
-    this.currentPage = e.pageIndex;
-    this.pageSize = e.pageSize;
-    this.iterator();
-  }
-
-  private iterator() {
-    const end = (this.currentPage + 1) * this.pageSize;
-    const start = this.currentPage * this.pageSize;
-    const part = this.array.slice(start, end);
-    this.dataSource = part;
-  }*/
-
+  
   openDialog(action, obj) {
     console.log(obj);
     obj.action = action;
@@ -193,20 +184,7 @@ export class OrderComponent implements OnInit {
             
     });
     console.log(this.dataSource);
-  }
-
-  /*deleteRowData(row_obj){
-    this.dataSource = this.dataSource.filter((value,key)=>{ 
-      // remove deleted from total 
-       var totalAmount = this.TotalOrderAmount
-       if(value.ProductId == row_obj.ProductId){
-        totalAmount -=  value.SalesTotalAmount;
-        this.TotalOrderAmount = totalAmount;        
-      }      
-      return value.ProductId != row_obj.ProductId;      
-    });
-    
-  }*/
+  }  
 
   public getCustomer(): void {    
     this.repoService.GetAll("api/Customer/Get")
@@ -230,7 +208,8 @@ export class OrderComponent implements OnInit {
         OrderId	: x.OrderId, // i will store login id in this place as OrderId will change in api
         BatchNo : saleFormValue.PaymentType, // i hold payment type here temporary to change to batch or null at sales
         SuppliedUnitPrice : x.SuppliedUnitPrice,
-        SuppliedTotalPrice : x.SuppliedTotalPrice
+        SuppliedTotalPrice : x.SuppliedTotalPrice,
+        AgentId: this.authenticationService.currentUserValue.EmployeeId
       }
     });
     
@@ -239,39 +218,7 @@ export class OrderComponent implements OnInit {
     this.repoService.POST(this.orderItem2, `api/Order/Post`)
     .subscribe(x => {
       console.log(x);
-      /*if(this.salesForm.valid){
-        this.repoService.POST(saleFormValue, `api/sale/Post`)
-        .subscribe(res => {                 
-          console.log(res)
-          let dialogRef = this.dialog.open(SuccessDialogComponent, {
-            width: '250px',
-            disableClose: true,
-            data: {message: "Order Successfully Completely"}
-          });
-          dialogRef.afterClosed()
-          .subscribe(result => {
-            console.log("closed");*/
-  
-            // update stock accordingly
-            /*this.dataSource.forEach(y => {
-              console.log(y.SalesTotalAmount);
-              this.repoService.GetByUnique(y.ProductId, `api/Order_CurrentStock/GetById`)
-                  .subscribe(current => {
-                    this.dynamicCurrentStock = current;            
-                    var soldStock : number = y.Quantity;
-                    var quantityInStock : number = this.dynamicCurrentStock.Quantity;
-                    var balance : number = quantityInStock - soldStock;
-                    // update current stock
-                    this.dynamicCurrentStock.Quantity = balance;
-                    
-                    this.repoService.UPDATE(this.dynamicCurrentStock, `api/Order_CurrentStock/Put`)
-                      .subscribe(update => {
-                        console.log();
-                        
-
-                      })
-                  });                    
-            })*/
+      
   
             let dialogRef = this.dialog.open(SuccessDialogComponent, {
               width: '250px',
@@ -288,15 +235,9 @@ export class OrderComponent implements OnInit {
               this.paymentType = [];
           });
   
-          //});          
-        //});
-      //}   
-
     })
     
-  }
-
-  
+  } 
 
 }
 
@@ -315,7 +256,8 @@ export interface OrderItem2 {
     OrderId	: string;
     BatchNo? : string;
     SuppliedUnitPrice : number;
-    SuppliedTotalPrice : number;    
+    SuppliedTotalPrice : number;  
+    AgentId?: string;  
 }
 
 
