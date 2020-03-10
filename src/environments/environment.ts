@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  urlAddress: 'https://service.uch-ibadan.com.ng'
+  //urlAddress: 'http://localhost/PayslipWebApi'
+  //urlAddress: 'http://localhost:50029'
 };
 
 /*

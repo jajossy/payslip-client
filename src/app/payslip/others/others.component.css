@@ -1,0 +1,23 @@
+mat-card-title{
+  text-align: center;
+  font-size: 15px;
+}
+mat-form-field {
+  width: 30%;
+  padding: 5px;
+}
+.img {
+    width: 100%;
+    margin-bottom: 18%;
+  }
+  .card-picture {
+    /*width: 15%;*/
+    margin-bottom: 2%;
+  }
+  .container {
+    min-height: 100%;
+    width: 100%;
+  }
+  .search-form {
+    width: 80%;
+  }

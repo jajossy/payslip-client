@@ -1,0 +1,28 @@
+<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+    <mat-card fxFlex="100%" fxFlex.xs="100%">
+        <mat-card-title>Stock Based Product List</mat-card-title>
+        <mat-card-content >
+            
+            
+                <!-- <mat-card-title>Orders</mat-card-title> -->
+                <mat-form-field class="search-form">
+                    <input matInput placeholder="Search Product" type="text">
+                </mat-form-field>
+                    <button button="submit" mat-raised-button><mat-icon>search</mat-icon></button>
+                    <br>
+                        
+                    <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
+                        <mat-card fxFlex="20%" fxFlex.xs="100%" *ngFor="let current of currentStock" class="card-picture">
+                            <mat-card-title fxLayout.gt-xs="row" fxLayout.xs="column">
+                                <span fxFlex="70%">{{current.CompanyStockTag.Stockname}}</span>                                
+                                <mat-icon fxFlex="10%">card_giftcard</mat-icon>            
+                            </mat-card-title>
+                            <span>Stock Level : {{current.Quantity}}</span>
+                        </mat-card>
+                    </div>
+            
+        </mat-card-content>
+    </mat-card>
+    
+</section>

@@ -1,0 +1,19 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<mat-chip-list>
+    
+    <!-- <mat-chip routerLink="/payslip/payslip/order" *ngIf="TakeOrder">Take Order</mat-chip>
+    <mat-chip routerLink="/payslip/payslip/approve" *ngIf="ApproveOrder">Approve Order</mat-chip>
+    <mat-chip routerLink="/payslip/payslip/realstock" *ngIf="RealStock">Real Stock</mat-chip>
+    <mat-chip routerLink="/payslip/payslip/checkout" *ngIf="CheckOut">Check Out</mat-chip> -->
+    
+    <mat-chip routerLink="/payslip/payslip/admin" *ngIf="admin">Admin</mat-chip>
+    <mat-chip routerLink="/payslip/payslip/gifmis" *ngIf="gifmis">Gifmis</mat-chip>
+    <mat-chip routerLink="/payslip/payslip/ippis" *ngIf="ippis">Ippis</mat-chip>
+    <mat-chip routerLink="/payslip/payslip/others" *ngIf="others">Others</mat-chip>
+    <mat-chip color = "accent" selected (click)="onLogout()"><mat-icon>gps_fixed</mat-icon>Logout</mat-chip>
+    
+</mat-chip-list>
+<main>
+    <router-outlet></router-outlet>
+</main>
+

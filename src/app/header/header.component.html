@@ -1,0 +1,26 @@
+<mat-toolbar class="mat-elevation-z5">
+    <div fxHide.gt-xs>
+        <button mat-icon-button (click)="onToggleSidenav()">
+            <mat-icon>menu</mat-icon>
+        </button>
+    </div>
+    <div>
+        <!-- <a routerLink="/home">Owner-Account</a> -->
+        <!--<a (click)="onToggleSidenav()"><img src="../../ftuicbt/assets/logonew.png" /></a>-->
+        <a (click)="onToggleSidenav()"><img src="../../assets/logo.png" /></a>    
+    </div>
+    <span style="color: #011f05; font-weight: 500; margin-left: 10px;
+    text-shadow: 1px 2px #cccccc;">PAYSLIP</span>
+    <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
+        <ul fxLayout fxLayoutGap="15px" class="navigation-items">
+            <li>
+                {{username}}
+            </li>
+            <li>
+                <button mat-icon-button (click)="onLogout()">
+                    <span><mat-icon>autorenew</mat-icon>Logout</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</mat-toolbar>

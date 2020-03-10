@@ -1,0 +1,25 @@
+<section fxLayout="column" fxLayoutAlign="center center">  
+
+
+    <!-- dialog-box.component.html -->
+    <h1 mat-dialog-title><strong>{{action}} Pending Order</strong></h1>
+    <div mat-dialog-content>
+        <mat-form-field *ngIf="action != 'Delete'; else elseTemplate">
+            <!-- <input placeholder="{{action}} PaymentType" matInput [(ngModel)]="local_data.PaymentType"> -->
+                                                            
+            <mat-select placeholder="{{action}} PaymentType" [(ngModel)]="local_data.PaymentType">                      
+            <mat-option *ngFor="let pay of paymentType" [value]="pay.Description">{{pay.Description}}</mat-option>
+            </mat-select>
+            
+        </mat-form-field>
+        <ng-template #elseTemplate>
+            Sure You want to Cancel Order <b>{{local_data.name}}</b>?
+        </ng-template>
+        </div>
+        <div mat-dialog-actions>
+        <button mat-button (click)="doAction()">{{action}}</button>
+        <button mat-button (click)="closeDialog()" mat-flat-button color="warn">Cancel</button>
+    </div>
+</section>
+    
+    

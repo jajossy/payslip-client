@@ -1,0 +1,112 @@
+<section fxLayout="column" fxLayoutAlign="center">
+    <h1 mat-dialog-title>Add Stock To Inventory</h1>
+    <span>The incoming stock of {{data.QuantitySupplied}} items will add to existing items</span>
+    <mat-dialog-content>
+        <h2>Incoming Stock Details</h2>
+        <mat-divider></mat-divider>
+        <div fxLayout="column wrap" fxLayoutGap="2px">
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Stock name:</strong></div>
+                <div fxFlex>{{data.CompanyStockTag.Stockname}}</div>
+            </div>
+        
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Company Name:</strong></div>
+                <div fxFlex>{{data.Supplier.CompanyName}}</div>
+            </div>       
+           
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Supplied Total Price: </strong></div>
+                <div fxFlex>{{data.SuppliedPrice | number: '1.2-2'}}&nbsp;naira</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Quantity Supplied:</strong></div>
+                <div fxFlex>{{data.QuantitySupplied}}&nbsp;Items</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Supplier Unit Price: </strong></div>
+                <div fxFlex>{{data.UnitPrice | number: '1.2-2'}}&nbsp;naira</div>
+            </div>                          
+
+            <mat-divider></mat-divider>       
+            
+        </div>
+        
+        <div *ngIf="checkStockExist" >
+            <p>The Selected Incoming Stock does not
+                    previously exist in the Company Stock, Set parameters below and Add</p>
+                <form>
+                    <mat-form-field>
+                        <input matInput type="number" placeholder="Enter Reorder Level" 
+                        [(ngModel)]="reorderLevel" [ngModelOptions]="{standalone: true}">                        
+                    </mat-form-field> 
+                    <mat-form-field>
+                        <input matInput type="number" placeholder="Enter Company Unit Price" 
+                        [(ngModel)]="CompanyUnitPrice" [ngModelOptions]="{standalone: true}">                        
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="Add Comment" 
+                        [(ngModel)]="Comment" [ngModelOptions]="{standalone: true}">                        
+                    </mat-form-field>                                     
+                </form>
+
+        </div>
+
+        <div *ngIf="stockExist" fxLayout="column wrap" fxLayoutGap="2px">
+            <h2>Existing Stock Details</h2>
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Stock name:</strong></div>
+                <div fxFlex>{{currentStock.CompanyStockTag.Stockname}}</div>
+            </div> 
+            
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Quantity in Stock:</strong></div>
+                <div fxFlex>{{currentStock.Quantity}}&nbsp;Items</div>
+            </div> 
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Previous Supplied Unit Price: </strong></div>
+                <div fxFlex>{{currentStock.SupplierUnitPrice | number: '1.2-2'}}&nbsp;naira</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Previous Company Unit Price: </strong></div>
+                <div fxFlex>{{currentStock.CompanyUnitPrice | number: '1.2-2'}}&nbsp;naira</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Previous Reorder Level: </strong></div>
+                <div fxFlex>{{currentStock.ReorderLevel}}</div>
+            </div>
+            
+            
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Company Price: </strong></div>
+                <input matInput type="number" placeholder="Set Company Price" 
+                [(ngModel)]="SetCompanyPrice" name="CompanyPrice">
+            </div>
+
+            <mat-divider></mat-divider> 
+
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>You can Reset Reorder Level: </strong></div>
+                <input matInput type="number" placeholder="Set Reorder Level" 
+                [(ngModel)]="setReorderLevel" name="ReorderLevel">
+            </div>
+                      
+
+            <mat-divider></mat-divider>          
+        </div>       
+          
+                              
+        <mat-divider></mat-divider>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" [mat-dialog-close]="true">Cancel</button>
+        <button mat-raised-button color="primary" (click)="closeDialog()">Add</button>
+    </mat-dialog-actions>
+</section>
+

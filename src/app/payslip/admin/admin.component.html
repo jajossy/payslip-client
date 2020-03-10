@@ -1,0 +1,79 @@
+<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">        
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+         
+    <mat-card fxFlex="100%" fxFlex.xs="100%">
+            <!-- <mat-card-title>Result</mat-card-title> -->
+            <mat-card-content>
+         
+                    <mat-card fxFlex="100%" fxFlex.xs="100%">
+                            
+                            <mat-card-content>                                
+                                <!--<mat-form-field style="width: 40%">                    
+                                    <mat-select placeholder="Choose Combination" [(ngModel)]="CombinationId" name="comb" (ngModelChange)="getResult($event)">                      
+                                    <mat-option *ngFor="let count of combination" [value]="count.CombinationId">{{count.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>&nbsp;&nbsp; -->
+
+                                <mat-form-field style="width: 40%">                    
+                                    <input matInput type="text" placeholder="Ippis Number" [(ngModel)]="IppisNo" name="Ippis">                                    
+                                </mat-form-field>
+                                <button mat-raised-button color="primary" (click)="searchIppis()">Search Ippis</button>
+                                <mat-form-field style="width: 40%">                    
+                                    <input matInput type="text" placeholder="Name" [(ngModel)]="Name" name="name">                                    
+                                </mat-form-field>
+                                <button mat-raised-button color="primary" (click)="searchName()">Search Name</button>
+                                
+
+                                <div class="mat-elevation-z8" #TABLE>
+                                <mat-table #table [dataSource]="dataSource" matSort>
+                                        <ng-container matColumnDef="Fullname">
+                                          <mat-header-cell *matHeaderCellDef> Full Name of Staff </mat-header-cell>>
+                                          <mat-cell *matCellDef="let element"  data-label="Fullname"> {{element.Fullname}} </mat-cell>>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Department">
+                                            <mat-header-cell *matHeaderCellDef> Department </mat-header-cell>>
+                                            <mat-cell *matCellDef="let element" data-label="Department"> {{element.Department}} </mat-cell>>
+                                        </ng-container>
+                                
+                                        <ng-container matColumnDef="Email">
+                                            <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>>
+                                            <mat-cell *matCellDef="let element" data-label="Email"> {{element.Email}} </mat-cell>>
+                                        </ng-container>
+                                
+                                        <ng-container matColumnDef="Ippis">
+                                            <mat-header-cell *matHeaderCellDef> Ippis Number </mat-header-cell>>
+                                            <mat-cell *matCellDef="let element" data-label="Ippis"> {{element.Ippis}} </mat-cell>>
+                                        </ng-container>
+
+                                        
+
+                                        <!-- <ng-container matColumnDef="PerScore">
+                                            <mat-header-cell *matHeaderCellDef> Percentage </mat-header-cell>>
+                                            <mat-cell *matCellDef="let element" data-label="Percentage"> {{element.PerScore}} </mat-cell>>
+                                        </ng-container> -->
+
+                                        <ng-container matColumnDef="update">
+                                            <mat-header-cell *matHeaderCellDef> Update </mat-header-cell>
+                                            <mat-cell *matCellDef="let element" data-label="Update">
+                                            <button mat-icon-button color="accent" (click)="redirectToUpdate(element)">
+                                                <mat-icon class="mat-18">system_update</mat-icon>
+                                            </button>
+                                            </mat-cell>
+                                        </ng-container>
+                                                                    
+                                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>>
+                                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>>
+                                      </mat-table>
+                                      </div>
+                                      <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                                          [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                                      </mat-paginator>
+                                      
+                            </mat-card-content>      
+                        </mat-card>
+                
+    </mat-card-content>
+</mat-card>
+<mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>      
+</section>

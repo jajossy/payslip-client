@@ -1,0 +1,38 @@
+<section fxLayout="column" fxLayoutAlign="center">
+        
+    <mat-dialog-content>
+        <h2>Edit Question</h2>
+        <mat-divider></mat-divider>
+        
+        
+        <div>
+            
+                <form>
+                     
+                    <mat-form-field  style="width: 80%">
+                        <input matInput type="text" placeholder="Fullname" 
+                        [(ngModel)]="staff.Fullname" [ngModelOptions]="{standalone: true}">                        
+                    </mat-form-field>
+                   
+                    <mat-form-field style="width: 80%">
+                        <input matInput type="text" placeholder="Email" 
+                        [(ngModel)]="staff.Email" [ngModelOptions]="{standalone: true}">                        
+                    </mat-form-field>
+                    
+                    <mat-form-field style="width: 80%">
+                        <input matInput type="text" placeholder="Ippis" 
+                        [(ngModel)]="staff.Ippis" [ngModelOptions]="{standalone: true}">                        
+                    </mat-form-field>           
+                                                       
+                </form>
+
+        </div>
+
+        <!-- <mat-divider></mat-divider> -->
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" [mat-dialog-close]="true">Cancel</button>
+        <button mat-raised-button color="primary" (click)="closeDialog(staff)">Update</button>
+    </mat-dialog-actions>
+</section>
+

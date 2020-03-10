@@ -1,0 +1,37 @@
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+  <mat-card fxFlex="300px" fxFlex.xs="100%">
+      <mat-card-title>Login into Application</mat-card-title>
+      <form [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="login(loginForm.value)" fxLayout="column wrap"
+      fxLayoutAlign="center center" fxLayoutGap="10px">
+        <mat-card-content>
+            <mat-form-field>
+                <input matInput type="text" placeholder="Surname" formControlName="surname" id="surname">
+                <!-- <mat-hint align="end">Not more then 10 characters long.</mat-hint> -->
+                <mat-error *ngIf="hasError('surname', 'required')">email is required</mat-error>
+                <!-- <mat-error *ngIf="hasError('username', 'maxlength')">You have more than 10 characters</mat-error> -->
+              </mat-form-field>
+               
+              <!-- <mat-form-field>
+                <input matInput [matDatepicker]="picker" placeholder="Choose a date of birth" formControlName="dateOfBirth" id="dateOfBirth" 
+                    readonly (click)="picker.open()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field> -->
+               
+              <mat-form-field>
+                <input matInput type="text" placeholder="Ippis Number" formControlName="ippis">
+                <!-- <mat-hint align="end">Not more then 8 characters long.</mat-hint> -->
+                <mat-error *ngIf="hasError('ippis', 'required')">Password is required</mat-error>
+                <!-- <mat-error *ngIf="hasError('password', 'maxlength')">You have more than 8 characters</mat-error> -->
+              </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+            <mat-card-actions align="center">
+                <button mat-raised-button color="primary" [disabled]="!loginForm.valid">Login</button>
+                <!--<button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>-->
+              </mat-card-actions>        
+        </mat-card-actions>
+      </form>
+    </mat-card>
+</section>
