@@ -41,6 +41,15 @@ export class RepositoryService {
     );
   }
 
+  GetLogin(id: string, id2: string, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}/${id}/${id2}`;
+    return this.http.get<any>(url).pipe(
+      tap(_ => console.log(`fetched id=${id}`))
+      //catchError(this.handleError<any>(`get id=${id}`))
+    );
+  }
+
+
   POST (model: object, method: string): Observable<any> {
     const url = `${environment.urlAddress}/${method}`;
     return this.http.post<any>(url, model, httpOptions).pipe(

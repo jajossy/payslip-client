@@ -6,9 +6,10 @@ import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { LoginComponent } from './login/login.component';
+import { ConfirmComponent } from './confirm/confirm.component';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, ConfirmComponent],
   imports: [
     CommonModule,
     AuthRoutingModule, 

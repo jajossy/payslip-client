@@ -1,17 +1,31 @@
-<section fxLayout="column" fxFlexAlign="stretch">
+<section fxLayout="row" fxFlexAlign="stretch">
     <div fxFlexAlign="center">
-        <p>Welcome to Suitroh Nigeria Limited Portal</p>
+        <!-- <p>UCH Employee Self Service</p> -->
     </div>    
 
-    <mat-tab-group (selectedTabChange)="executeSelectedChange($event)">
-        <mat-tab label="Distribution"> 
-          <p>Distribution.</p> 
-        </mat-tab>
-        <mat-tab label="Marketing">
-           <p>Marketing.</p>
-          </mat-tab>
-        <mat-tab label="Excellent Service">
-           <p>Excellent Service.</p>
-          </mat-tab>
-      </mat-tab-group>
+    
+
+      <mat-card fxLayoutGap="12px" fxFlex="38%" fxFlex.xs="38%">
+        <mat-card-title>Staff Information</mat-card-title>
+        <mat-divider></mat-divider>
+        <p><strong>Name:</strong> {{fullname}}</p>
+        <mat-divider></mat-divider>
+        <p>&nbsp;</p>
+        <button mat-raised-button color="accent" selected (click)="onLogout()"><mat-icon>gps_fixed</mat-icon>Logout</button>   
+    </mat-card>
+
+    <mat-card fxFlex="55%" fxFlex.xs="55%">
+      <mat-card-title>Choose Platform</mat-card-title>
+      <mat-card-content>
+        <button style="margin: 2px;" mat-raised-button color="primary">GIFMIS</button>                  
+      </mat-card-content> 
+      <mat-card-content>
+        <button style="margin: 2px;" mat-raised-button color="primary" (click)="ippis()">IPPIS</button>                  
+      </mat-card-content>
+      <mat-card-content>
+        <p><strong>Email:</strong> {{email}}</p>
+        <p><strong>NB:</strong> Please note that your payslip will be sent to the email indicated above.</p>
+      </mat-card-content>    
+  </mat-card>
+
 </section>

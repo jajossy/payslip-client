@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AuthenticationService } from './../authentication.service';
 
 @Component({
   selector: 'app-navigation',
@@ -8,13 +9,25 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class NavigationComponent implements OnInit {
   @Output() sidenavClose = new EventEmitter();
 
-  constructor() { }
+  constructor(private authenticationService : AuthenticationService) { }
 
   ngOnInit() {
   }
 
-  public onSidenavClose = () => {
+  public onSidenavClose = () => { 
+    if(this.authenticationService.currentUser == null )
+    {
+      
+    }
+    else{
+      this.sidenavClose.emit();
+    } 
+    //this.sidenavClose.emit();
+  }
+
+  logout(){
     this.sidenavClose.emit();
+    this.authenticationService.logout();
   }
 
 }

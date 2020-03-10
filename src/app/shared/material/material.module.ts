@@ -10,6 +10,7 @@ import {
  import {MatProgressBarModule} from '@angular/material/progress-bar';
  import {MatDividerModule} from '@angular/material/divider';
  import {MatGridListModule} from '@angular/material/grid-list';
+ import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import {
     MatSelectModule,
     MatProgressBarModule,
     MatDialogModule,
-    MatDividerModule    
+    MatDividerModule,
+    MatCheckboxModule    
   ],
   exports: [
     MatTabsModule,
@@ -57,7 +59,8 @@ import {
     MatSelectModule,
     MatProgressBarModule,
     MatDialogModule,
-    MatDividerModule    
+    MatDividerModule,
+    MatCheckboxModule   
   ],
   declarations: []   
 })

@@ -11,6 +11,7 @@ import { InputDialogComponent } from './dialogs/input-dialog/input-dialog.compon
 import { InputApproveDialogComponent } from './dialogs/inputApprove-dialog/inputApprove-dialog.component';
 import { ApproveDialogComponent } from './dialogs/approve-dialog/approve-dialog.component';
 import { CheckoutDialogComponent } from './dialogs/checkout-dialog/checkout-dialog.component';
+import { EditStaffDialogComponent } from './dialogs/edit-staff-dialog/edit-staff-dialog.component';
  
 @NgModule({
   imports: [
@@ -25,10 +26,10 @@ import { CheckoutDialogComponent } from './dialogs/checkout-dialog/checkout-dial
     FlexLayoutModule
   ],
   declarations: [SuccessDialogComponent, ErrorDialogComponent, StockDialogComponent, InputDialogComponent,
-                ApproveDialogComponent, CheckoutDialogComponent, InputApproveDialogComponent],
+                ApproveDialogComponent, CheckoutDialogComponent, InputApproveDialogComponent, EditStaffDialogComponent],
   entryComponents:[
     SuccessDialogComponent, ErrorDialogComponent, StockDialogComponent, InputDialogComponent,
-     ApproveDialogComponent, CheckoutDialogComponent, InputApproveDialogComponent
+     ApproveDialogComponent, CheckoutDialogComponent, InputApproveDialogComponent, EditStaffDialogComponent
   ]
 })
 export class SharedModule { }

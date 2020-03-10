@@ -2,22 +2,12 @@
     <a mat-list-item routerLink="/home" (click)="onSidenavClose()">
         <mat-icon>home</mat-icon><span class="nav-caption">Home</span>
     </a>
-    <a mat-list-item routerLink="/stock/stock" (click)="onSidenavClose()">
-        <mat-icon>shopping_cart</mat-icon><span class="nav-caption">Stock</span>
+    
+    <a mat-list-item routerLink="/payslip/payslip" (click)="onSidenavClose()">
+        <mat-icon>motorcycle</mat-icon><span class="nav-caption">payslip</span>
     </a>
-    <a mat-list-item routerLink="/transaction/transaction" (click)="onSidenavClose()">
-        <mat-icon>motorcycle</mat-icon><span class="nav-caption">Transactions</span>
-    </a>
-    <!--<a mat-list-item routerLink="#" (click)="onSidenavClose()">
-        <mat-icon>find_replace</mat-icon><span class="nav-caption">Approve Order</span>
-    </a> -->
-    <!--<a mat-list-item routerLink="#" (click)="onSidenavClose()">
-        <mat-icon>print</mat-icon><span class="nav-caption">Reports</span>
-    </a> -->
-    <a mat-list-item routerLink="/register/register" (click)="onSidenavClose()">
-            <mat-icon>perm_identity</mat-icon><span class="nav-caption">Register</span>
-        </a>
-    <a mat-list-item routerLink="/" (click)="onSidenavClose()">
+   
+    <a mat-list-item routerLink="/" (click)="logout()">
         <mat-icon>logout</mat-icon><span class="nav-caption">Logout</span>
     </a>
     <!-- <mat-list-item [matMenuTriggerFor]="menu">

@@ -1,0 +1,28 @@
+<section fxLayout="column" fxFlexAlign="stretch">
+    <div fxFlexAlign="center">
+        <p>GIFMIS PLATFORM</p>
+    </div>    
+
+    <!--<mat-tab-group (selectedTabChange)="executeSelectedChange($event)">
+        <mat-tab label="Distribution"> 
+          <p>Distribution.</p> 
+        </mat-tab>
+        <mat-tab label="Marketing">
+           <p>Marketing.</p>
+          </mat-tab>
+        <mat-tab label="Excellent Service">
+           <p>Excellent Service.</p>
+          </mat-tab>
+      </mat-tab-group> -->
+
+
+      <mat-card fxFlex="100%" fxFlex.xs="100%">
+        <mat-card-title>Click to print a month of interest</mat-card-title>
+        <mat-card-content>
+          <button style="margin: 2px;" mat-raised-button color="primary" (click)="july()" >July</button>
+          <button style="margin: 2px;" mat-raised-button color="primary" (click)="august()" >August</button>
+          <button style="margin: 2px;" mat-raised-button color="primary" (click)="september()" >September</button>
+          <button style="margin: 2px;" mat-raised-button color="primary" (click)="october()">October</button>          
+        </mat-card-content>      
+    </mat-card>
+</section>

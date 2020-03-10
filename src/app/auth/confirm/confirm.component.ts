@@ -11,13 +11,13 @@ import * as jwt_decode from 'jwt-decode';
 import { Login } from '../login';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-confirm',
+  templateUrl: './confirm.component.html',
+  styleUrls: ['./confirm.component.css']
 })
-export class LoginComponent implements OnInit {  
+export class ConfirmComponent implements OnInit {  
 
-  public loginForm: FormGroup;
+  public confirmForm: FormGroup;
   returnUrl: string;
   showProgress: boolean;
 
@@ -39,12 +39,7 @@ export class LoginComponent implements OnInit {
       window.location.reload();
     }*/
 
-    /*this.loginForm = new FormGroup({
-      surname: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      ippis: new FormControl('', [Validators.required, Validators.maxLength(8)])
-    });*/
-
-    this.loginForm = new FormGroup({
+    this.confirmForm = new FormGroup({
       surname: new FormControl('', [Validators.required]),
       ippis: new FormControl('', [Validators.required])
     });
@@ -55,11 +50,11 @@ export class LoginComponent implements OnInit {
   }  
 
   public hasError = (controlName: string, errorName: string) => {
-    return this.loginForm.controls[controlName].hasError(errorName);
+    return this.confirmForm.controls[controlName].hasError(errorName);
   }
 
-  public login = (loginFormValue) => {
-    if(this.loginForm.valid) {
+  public confirm = (loginFormValue) => {
+    if(this.confirmForm.valid) {
       this.executeLoginAction(loginFormValue);
     }
   }
@@ -69,8 +64,10 @@ export class LoginComponent implements OnInit {
       //var username =  loginFormValue.username;
       //var password =  loginFormValue.password + "&grant_type=password";
     //} 
-    let model = "username=" + loginFormValue.surname + "&password=" + loginFormValue.ippis + "&grant_type=" + "password";
-    this.authenticationService.login(model)
+    let id2 = loginFormValue.surname;
+    let id = loginFormValue.ippis;
+    
+    this.repoService.GetLogin(id, id2, `api/User/GetFirstLogin`)
     .subscribe(res => {
       //this.router.navigate(['/home']);      
       
