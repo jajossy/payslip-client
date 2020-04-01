@@ -1,0 +1,152 @@
+<section fxLayout="row" fxFlexAlign="stretch">
+    
+    <mat-card fxFlex="100%" fxFlex.xs="100%">
+        <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+        <!-- <mat-card-title>Result</mat-card-title> -->
+    <mat-card-content>
+
+      <mat-card fxFlex="45%" fxFlex.xs="45%" style="width: 45%"> 
+        <mat-card-title>Enter Category</mat-card-title>
+        <mat-card-content>        
+
+
+        <form [formGroup]="categoryForm" autocomplete="off" novalidate 
+              (ngSubmit)="addCategory(categoryForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+              fxLayoutGap="10px">
+              
+                <div>                      
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="Enter Category" 
+                        formControlName="Description" id="description"> 
+                        <mat-error *ngIf="hasError('Description', 'required')">Category is required</mat-error>                                                                                
+                    </mat-form-field>                                                                
+                  </div> 
+
+              <mat-card-actions>
+                  <button mat-raised-button color="primary" *ngIf="categorySaveButton" [disabled]="!categoryForm.valid">Save Category</button>
+                  <button mat-raised-button color="primary" *ngIf="categoryUpdateButton" [disabled]="!categoryForm.valid"
+                  (click)="updateCategory(categoryForm.value)" >Update Category</button>                  
+              </mat-card-actions>
+          </form>
+          
+
+          <div class="example-container mat-elevation-z8">
+              <div fxLayout fxLayoutAlign="center center">
+                  <mat-form-field fxFlex="40%">
+                      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                  </mat-form-field>
+              </div>
+                <mat-table [dataSource]="dataSource" matSort >
+                    <ng-container matColumnDef="Description">
+                      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="Year"> {{element.Description}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="update">
+                        <mat-header-cell *matHeaderCellDef> Update </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="Update">
+                        <button mat-icon-button color="accent" (click)="UpdateCategoryForm(element)">
+                            <mat-icon class="mat-18">system_update</mat-icon>
+                        </button>
+                        </mat-cell>
+                    </ng-container>
+            
+                    <!--<ng-container matColumnDef="delete">
+                      <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="delete">
+                        <button mat-icon-button color="primary" (click)="delete(element.PayslipId)">
+                            <mat-icon class="mat-18">delete</mat-icon>
+                        </button>
+                      </mat-cell>
+                    </ng-container> -->                 
+                    
+                   
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  </mat-table>
+                  <mat-paginator
+                      #paginator="matPaginator"
+                      [pageSize]="3"
+                      [pageSizeOptions]="[5, 10, 25, 100]">
+                    </mat-paginator> 
+                </div>
+        </mat-card-content> 
+      </mat-card>
+                                        
+      <mat-card fxFlex="45%" fxFlex.xs="45%" style="width: 45%"> 
+            <mat-card-title>Enter Sub Category</mat-card-title>
+            <mat-card-content>        
+    
+    
+            <form [formGroup]="subcategoryForm" autocomplete="off" novalidate 
+                  (ngSubmit)="addSubCategory(subcategoryForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+                  fxLayoutGap="10px">
+                  
+                  <mat-form-field style="width: 80%">                    
+                        <mat-select placeholder="Choose Category" formControlName="CategoryId" [(ngModel)]="categoryId"  (ngModelChange)="loadSubCategory($event)" >                      
+                        <mat-option *ngFor="let cat of CategoryData" [value]="cat.CategoryId">
+                            {{cat.Description}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="hasError2('CategoryId', 'required')">Category is required</mat-error>
+                    </mat-form-field>
+    
+                      <div>                      
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Enter SubCategory" 
+                            formControlName="Description" id="description">
+                            <mat-error *ngIf="hasError2('Description', 'required')">Sub Category is required</mat-error>                                                                                 
+                        </mat-form-field>                                                                
+                      </div> 
+    
+                  <mat-card-actions>
+                      <button mat-raised-button color="primary" *ngIf="subcategorySaveButton" [disabled]="!subcategoryForm.valid">Save Sub Category</button>
+                      <button mat-raised-button color="primary" *ngIf="subcategoryUpdateButton" [disabled]="!subcategoryForm.valid"
+                  (click)="updateSubCategory(subcategoryForm.value)" >Update SubCategory</button>
+                  </mat-card-actions>
+              </form>
+    
+              <div class="example-container mat-elevation-z8">
+                  <div fxLayout fxLayoutAlign="center center">
+                      <mat-form-field fxFlex="40%">
+                          <input matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+                      </mat-form-field>
+                  </div>
+                    <mat-table [dataSource]="dataSource2" matSort2 >
+                        <ng-container matColumnDef="Description">
+                          <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                          <mat-cell *matCellDef="let element" data-label="Description"> {{element.Description}} </mat-cell>
+                        </ng-container>
+                
+                        <!-- <ng-container matColumnDef="delete">
+                          <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                          <mat-cell *matCellDef="let element" data-label="delete">
+                            <button mat-icon-button color="primary" (click)="delete(element.PayslipId)">
+                                <mat-icon class="mat-18">delete</mat-icon>
+                            </button>
+                          </mat-cell>
+                        </ng-container>  -->
+                        
+                        <ng-container matColumnDef="update">
+                            <mat-header-cell *matHeaderCellDef> Update </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Update">
+                            <button mat-icon-button color="accent" (click)="UpdateSubCategoryForm(element)">
+                                <mat-icon class="mat-18">system_update</mat-icon>
+                            </button>
+                            </mat-cell>
+                        </ng-container>
+                        
+                       
+                        <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+                      </mat-table>
+                      <mat-paginator
+                        #paginator2="matPaginator"
+                        [pageSize]="10"
+                        [pageSizeOptions]="[5, 10, 25, 100]">
+                    </mat-paginator>
+                </div>
+            </mat-card-content> 
+          </mat-card>
+        </mat-card-content>
+      </mat-card>
+</section>

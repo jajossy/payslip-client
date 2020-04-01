@@ -10,6 +10,10 @@ import { AdminComponent } from './admin/admin.component';
 import { GifmisComponent } from './gifmis/gifmis.component';
 import { IppisComponent } from './ippis/ippis.component';
 import { OthersComponent } from './others/others.component';
+import { UploadComponent } from './upload/upload.component';
+import { AvailableComponent } from './available/available.component';
+import { CategoryComponent } from './category/category.component';
+import { StaffComponent } from './staff/staff.component';
 import { PayslipComponent } from './payslip.component';
 
 
@@ -20,6 +24,10 @@ import { PayslipComponent } from './payslip.component';
                   GifmisComponent,
                   IppisComponent,
                   OthersComponent,
+                  CategoryComponent,
+                  UploadComponent,
+                  AvailableComponent,
+                  StaffComponent,
                   PayslipComponent                 
                 ],
   imports: [

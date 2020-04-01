@@ -1,33 +1,73 @@
 <section fxLayout="column" fxFlexAlign="stretch">
-    <div fxFlexAlign="center">
-        <p>IPPIS PLATFORM</p>
-    </div>    
+    <div fxFlexAlign="center" *ngIf="userView">
+        <p>Fullname:&nbsp;{{Fullname}}&nbsp;|&nbsp;Name:&nbsp;{{Surname}}&nbsp;{{Firstname}}&nbsp;|&nbsp;Email:&nbsp;{{staffEmail}}&nbsp;|&nbsp;Ippis No. / Pin No.:&nbsp; {{IppisNo}}</p>
+    </div>
+    <div fxFlexAlign="center" *ngIf="adminView">
+        <p>Name:&nbsp;{{Surname}}&nbsp;{{Firstname}}&nbsp;| &nbsp; Admin can enter any Ippis No to send Payslip</p>
+    </div>     
 
-    <!--<mat-tab-group (selectedTabChange)="executeSelectedChange($event)">
-        <mat-tab label="Distribution"> 
-          <p>Distribution.</p> 
-        </mat-tab>
-        <mat-tab label="Marketing">
-           <p>Marketing.</p>
-          </mat-tab>
-        <mat-tab label="Excellent Service">
-           <p>Excellent Service.</p>
-          </mat-tab>
-      </mat-tab-group> -->
+    
 
 
       <mat-card fxFlex="100%" fxFlex.xs="100%">
           <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
-        <mat-card-title>Click for month of interest</mat-card-title>
+        <!-- <mat-card-title>SELECT THROUGH THE OPTIONS BELOW FOR YOUR PAYSLIP</mat-card-title> -->
+        <div>SELECT THROUGH THE OPTIONS BELOW FOR YOUR PAYSLIP - Please see available payslips for successful delivery! </div>
         <mat-card-content>
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="july()" disabled >July</button>
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="august()" disabled >August</button>
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="september()" disabled >September</button>
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="october()" disabled >October</button>
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="nov2019()" [disabled] = "Nov2019Disabled">November 2019</button>
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="dec2019()" [disabled] = "Dec2019Disabled">December 2019</button>
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="jan2020()" [disabled]  = "Jan2020Disabled">January 2020</button> 
-          <button style="margin: 2px;" mat-raised-button color="primary" (click)="feb2020()" [disabled]  = "Feb2020Disabled">Febuary 2020</button>        
+          
+          
+          <form [formGroup]="uploadForm" autocomplete="off" novalidate 
+              (ngSubmit)="addUpload(uploadForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+              fxLayoutGap="10px">             
+
+                  <div>                      
+                        <mat-form-field style="width: 80%">                    
+                                <mat-select placeholder="Choose Category" formControlName="CategoryId" [(ngModel)]="categoryId"  (ngModelChange)="loadSubCategory($event)" >                      
+                                <mat-option *ngFor="let cat of CategoryData" [value]="cat.CategoryId">
+                                    {{cat.Description}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="hasError('CategoryId', 'required')">Category is required</mat-error>
+                            </mat-form-field>
+                            <mat-form-field style="width: 80%">                    
+                                    <mat-select placeholder="Choose SubCategory" formControlName="SubCategoryId" [(ngModel)]="subcategoryId">                      
+                                    <mat-option *ngFor="let cat2 of SubCategoryData" [value]="cat2.SubCategoryId">
+                                        {{cat2.Description}}</mat-option>
+                                    </mat-select>                                    
+                                </mat-form-field>
+                          <mat-form-field style="width: 100%">                    
+                              <mat-select placeholder="Choose Year" formControlName="payslipyear" [(ngModel)]="YearId">                      
+                              <mat-option *ngFor="let yr of year" [value]="yr.id">{{yr.value}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="hasError('payslipyear', 'required')">payslipyear is required</mat-error>
+                          </mat-form-field>
+                          <mat-form-field style="width: 100%">                    
+                              <mat-select placeholder="Choose Month" formControlName="payslipmonth" [(ngModel)]="MonthId" >                      
+                              <mat-option *ngFor="let mth of month" [value]="mth.id">{{mth.value}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="hasError('payslipmonth', 'required')">payslipmonth is required</mat-error>
+                          </mat-form-field> 
+                          <div *ngIf="userView">                      
+                              <mat-form-field>
+                                  <input matInput type="text" placeholder="Ippis Number / Pin Number" 
+                                  formControlName="Ippis" id="ippis" readonly> 
+                                  <mat-error *ngIf="hasError('Ippis', 'required')">Ippis Number is required</mat-error>                                                                                
+                              </mat-form-field>                                                                
+                            </div> 
+                            <div *ngIf="adminView">                      
+                                <mat-form-field>
+                                    <input matInput type="text" placeholder="Ippis Number" 
+                                    formControlName="Ippis" id="ippis"> 
+                                    <mat-error *ngIf="hasError('Ippis', 'required')">Ippis Number is required</mat-error>                                                                                
+                                </mat-form-field>                                                                
+                            </div>                        
+                          <!--<p><button mat-raised-button color="primary" (click)="load()">load</button></p>-->
+                                           
+                  </div>      
+              <mat-card-actions>
+                  <button mat-raised-button color="primary" *ngIf="uploadSaveButton" [disabled]="!uploadForm.valid">Send My Payslip</button>
+              </mat-card-actions>
+          </form>
+
         </mat-card-content>      
     </mat-card>
 </section>

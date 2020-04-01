@@ -1,0 +1,194 @@
+<section fxLayout="row wrap" fxLayoutAlign="left" fxLayoutGap="15px">        
+        <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+        <mat-card fxFlex="100%" fxFlex.xs="100%">
+                <!-- <mat-card-title>Result</mat-card-title> -->
+            <mat-card-content>
+             
+                <mat-card fxFlex="100%" fxFlex.xs="100%">
+                        <mat-card-title>Staff Upload - Enter and list all Staff</mat-card-title>
+
+                        <div>
+                            <label for="file">Choose File For Bulk Staff Upload</label>
+                            <input type="file"
+                                id="file"
+                                (change)="handleFileInput($event.target.files)"> 
+                                <button mat-raised-button color="primary" (click)="addUpload()">load</button>                   
+                        </div>
+                        <mat-card-content>
+            
+                    <mat-tab-group [(selectedIndex)]="selected">
+
+                    <mat-tab label="Staff List">
+                            <mat-card fxFlex="100%" fxFlex.xs="100%">
+                                    <mat-card-title>Staff List</mat-card-title>
+                                    <mat-card-content>
+                                        
+                                        <div fxLayout fxLayoutAlign="center center">
+                                            <mat-form-field fxFlex="40%">
+                                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                            </mat-form-field>
+                                        </div>
+                                        
+                                        <mat-form-field style="width: 35%">                    
+                                                <input matInput type="text" placeholder="Ippis Number" [(ngModel)]="IppisNo" name="Ippis">                                    
+                                            </mat-form-field>
+                                            <button mat-raised-button color="primary" (click)="searchIppis()">Search Ippis</button>&nbsp;
+                                            <mat-form-field style="width: 35%">                    
+                                                <input matInput type="text" placeholder="Name" [(ngModel)]="Name" name="name">                                    
+                                            </mat-form-field>
+                                        <button mat-raised-button color="primary" (click)="searchName()">Search Name</button>
+
+                                        <mat-table [dataSource]="dataSource" matSort>
+                                                <ng-container matColumnDef="Ippis">
+                                                    <mat-header-cell *matHeaderCellDef> Ippis / Pin </mat-header-cell>>
+                                                    <mat-cell *matCellDef="let element"  data-label="Ippis"> {{element.Ippis}} </mat-cell>>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="Surname">
+                                                    <mat-header-cell *matHeaderCellDef> Surname </mat-header-cell>>
+                                                    <mat-cell *matCellDef="let element"  data-label="Surname"> {{element.Surname}} </mat-cell>>
+                                                </ng-container>
+                                        
+                                                <ng-container matColumnDef="Firstname">
+                                                    <mat-header-cell *matHeaderCellDef> Firstname </mat-header-cell>>
+                                                    <mat-cell *matCellDef="let element" data-label="Firstname"> {{element.Firstname}} </mat-cell>>
+                                                </ng-container>
+                                        
+                                                <!--<ng-container matColumnDef="Othername">
+                                                    <mat-header-cell *matHeaderCellDef> Othername </mat-header-cell>>
+                                                    <mat-cell *matCellDef="let element" data-label="Othername"> {{element.Othername}} </mat-cell>>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="Fullname">
+                                                    <mat-header-cell *matHeaderCellDef> Fullname </mat-header-cell>>
+                                                    <mat-cell *matCellDef="let element" data-label="Fullname"> {{element.Fullname}} </mat-cell>>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="Department">
+                                                    <mat-header-cell *matHeaderCellDef> Department </mat-header-cell>>
+                                                    <mat-cell *matCellDef="let element" data-label="Department"> {{element.Department}} </mat-cell>>
+                                                </ng-container> -->
+                                                
+                                                <ng-container matColumnDef="Email">
+                                                    <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>>
+                                                    <mat-cell *matCellDef="let element" data-label="Email"> {{element.Email}} </mat-cell>>
+                                                </ng-container>
+
+                                                <!--<ng-container matColumnDef="Active">
+                                                    <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> 
+                                                        <mat-checkbox [(ngModel)]="element.Active"></mat-checkbox>
+                                                    </mat-cell>
+                                                </ng-container> -->
+                                                        
+                                                
+                                                <ng-container matColumnDef="update">
+                                                        <mat-header-cell *matHeaderCellDef> Update </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element" data-label="Update">
+                                                        <button mat-icon-button color="accent" (click)="redirectToUpdate(element)">
+                                                            <mat-icon class="mat-18">system_update</mat-icon>
+                                                        </button>
+                                                        </mat-cell>
+                                                    </ng-container>
+
+                                                    <ng-container matColumnDef="delete">
+                                                        <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element" data-label="Delete">
+                                                        <button mat-icon-button color="accent" (click)="delete(element)">
+                                                            <mat-icon class="mat-18">delete</mat-icon>
+                                                        </button>
+                                                        </mat-cell>
+                                                    </ng-container>
+                                                
+                                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>>
+                                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>>
+                                                </mat-table>
+                                                <mat-paginator
+                                                #paginator="matPaginator"
+                                                [pageSize]="3"
+                                                [pageSizeOptions]="[5, 10, 25, 100]"
+                                                ></mat-paginator>                                
+                                    </mat-card-content>      
+                                </mat-card>
+                        </mat-tab>
+
+                        <mat-tab label="Register Staff"> 
+                                <mat-card fxFlex="300px" fxFlex.xs="100%">
+                                        <mat-card-title>Enter Staff</mat-card-title>
+                                        <form [formGroup]="regForm" autocomplete="off" novalidate 
+                                            (ngSubmit)="addReg(regForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+                                            fxLayoutGap="10px">
+                                            <mat-card-content>
+                                                <mat-form-field>
+                                                    <input matInput type="text" placeholder="Ippis" 
+                                                    formControlName="Ippis" id="ippis">
+                                                    <mat-error *ngIf="hasError('Ippis', 'required')">
+                                                        Ippis is required
+                                                    </mat-error>
+                                                </mat-form-field>
+
+                                                <mat-form-field>
+                                                    <input matInput type="text" placeholder="Surname" 
+                                                    formControlName="Surname" id="surname">
+                                                    <mat-error *ngIf="hasError('Surname', 'required')">
+                                                        Surname is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                
+                                                <mat-form-field>
+                                                    <input matInput type="text" placeholder="Firstname" 
+                                                    formControlName="Firstname" id="firstname">
+                                                    <mat-error *ngIf="hasError('Firstname', 'required')">
+                                                        Firstname is required
+                                                    </mat-error>                                        
+                                                </mat-form-field>
+                                
+                                                <mat-form-field>
+                                                    <input matInput type="text" placeholder="Othername" 
+                                                    formControlName="Othername" id="othername">                                                                                    
+                                                </mat-form-field>
+
+                                                <mat-form-field>
+                                                    <input matInput type="text" placeholder="Fullname" 
+                                                    formControlName="Fullname" id="fullname">                                                                                    
+                                                </mat-form-field>
+
+                                                <mat-form-field>
+                                                    <input matInput type="text" placeholder="Department" 
+                                                    formControlName="Department" id="department">                                                                                   
+                                                </mat-form-field>
+
+                                                <mat-form-field>
+                                                        <input matInput type="text" placeholder="Email" 
+                                                        formControlName="Email" id="email">
+                                                        <mat-error *ngIf="hasError('Email', 'required')">
+                                                            Email is required
+                                                        </mat-error>                                        
+                                                    </mat-form-field>
+
+                                                                                                     
+                                                    <mat-checkbox  placeholder="Active" formControlName="Active" [(ngModel)]="Active" 
+                                                    id="active">
+                                                            Staff Active
+                                                    </mat-checkbox>                                                                                                                                      
+                                                
+                                                
+                                
+                                            </mat-card-content>
+                                            <mat-card-actions>
+                                                <button mat-raised-button color="primary" *ngIf="staffSaveButton" [disabled]="!regForm.valid">Register</button>
+                                            </mat-card-actions>
+                                        </form> 
+                                                <button mat-raised-button color="primary" *ngIf="staffUpdateButton" (click)="updateTag()" >Update Tag</button>&nbsp;
+                                                <button mat-raised-button color="primary" *ngIf="resetButton" (click)="reset()"><mat-icon>verified_user</mat-icon></button>               
+                                    </mat-card> 
+                        </mat-tab>
+                                    
+                    </mat-tab-group>
+                </mat-card-content>
+            </mat-card>
+            </mat-card-content>
+        </mat-card>
+    <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>      
+    </section>
+    

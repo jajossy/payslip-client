@@ -70,8 +70,44 @@ export class RepositoryService {
     return this.http.put(`${this.baseUrl}/${id}`, value);
   }*/
 
-  DELETE (id: string): Observable<any> {
-    const url = `${environment.urlAddress}/${id}`;  
+  postFile2(fileToUpload: File, id: number, id2: number, id3: string, id4: string, id5: number, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}/${id}/${id2}/${id3}/${id4}/${id5}`;
+    const formData: FormData = new FormData();
+    formData.append('fileKey', fileToUpload, fileToUpload.name);
+    let headers = new Headers()  
+    //headers.append('Content-Type', 'json');
+    //headers.append('Accept', 'application/json');  
+    return this.http
+      .post(url, formData).pipe(
+        tap((product: object) => console.log(`file uploaded`))
+        //catchError(this.handleError<object>('add model'))
+      );
+  }
+
+  postFile(fileToUpload: File, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}`;
+    const formData: FormData = new FormData();
+    formData.append('fileKey', fileToUpload, fileToUpload.name);
+    let headers = new Headers()  
+    //headers.append('Content-Type', 'json');
+    //headers.append('Accept', 'application/json');  
+    return this.http
+      .post(url, formData).pipe(
+        tap((product: object) => console.log(`file uploaded`))
+        //catchError(this.handleError<object>('add model'))
+      );
+  }
+
+  DELETE (id: string, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}/${id}`;  
+    return this.http.delete<any>(url, httpOptions).pipe(
+      tap(_ => console.log(`deleted id=${id}`))
+      //catchError(this.handleError<any>('delete'))
+    );
+  }
+
+  DELETEInt (id: number, method: string): Observable<any> {
+    const url = `${environment.urlAddress}/${method}/${id}`;  
     return this.http.delete<any>(url, httpOptions).pipe(
       tap(_ => console.log(`deleted id=${id}`))
       //catchError(this.handleError<any>('delete'))
