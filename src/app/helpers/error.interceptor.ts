@@ -18,21 +18,34 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.authenticationService.logout();
                 location.reload(true);
             }
-
-            //const error = err.error.message || err.statusText;
-            const error = err.error || err.statusText;
-
-            let dialogRef = this.dialog.open(ErrorDialogComponent, {
-                width: '250px',
-                disableClose: true,
-                data: {message: "Error in completing request..."}                                                
-              });
-              dialogRef.afterClosed()
-              .subscribe(result => {
-                console.log("closed");
-              });
-
-            return throwError(error);
+            else if(err.statusText === 'Conflict'){
+                let dialogRef = this.dialog.open(ErrorDialogComponent, {
+                    width: '250px',
+                    disableClose: true,
+                    data: {message: "This month payslip already exist for this Category!"}                                                
+                  });
+                  dialogRef.afterClosed()
+                  .subscribe(result => {
+                    console.log("closed");
+                  });
+                  const error = err.error || err.statusText;
+                    return throwError(error);
+            }
+            else{
+                let dialogRef = this.dialog.open(ErrorDialogComponent, {
+                    width: '250px',
+                    disableClose: true,
+                    data: {message: "Error in completing request..."}                                                
+                  });
+                  dialogRef.afterClosed()
+                  .subscribe(result => {
+                    console.log("closed");
+                  });
+                  //const error = err.error.message || err.statusText;
+                    const error = err.error || err.statusText;
+                    return throwError(error);
+            }
+            
         }))
     }
 }

@@ -5,6 +5,13 @@
       <form [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="login(loginForm.value)" fxLayout="column wrap"
       fxLayoutAlign="center center" fxLayoutGap="10px">
         <mat-card-content>
+            <mat-form-field style="width: 80%">                    
+                <mat-select placeholder="Status" formControlName="status" id="statu">                      
+                <mat-option *ngFor="let stat of userStatus" [value]="stat.id">{{stat.value}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('status', 'required')">Status is required</mat-error>
+            </mat-form-field>
+
             <mat-form-field>
                 <input matInput type="text" placeholder="Surname" formControlName="surname" id="surname">
                 <!-- <mat-hint align="end">Not more then 10 characters long.</mat-hint> -->
@@ -32,6 +39,6 @@
                 <!--<button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>-->
               </mat-card-actions>        
         </mat-card-actions>
-      </form>
+      </form>      
     </mat-card>
 </section>

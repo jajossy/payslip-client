@@ -21,6 +21,11 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   showProgress: boolean;
 
+  userStatus : Status[] = [
+    { 'id' : 'user', 'value': 'Staff'},
+    { 'id' : 'admin', 'value': 'Site Admin'}    
+  ]
+
   constructor(private repoService: RepositoryService,
               private authenticationService: AuthenticationService,
               private route: ActivatedRoute,
@@ -45,6 +50,7 @@ export class LoginComponent implements OnInit {
     });*/
 
     this.loginForm = new FormGroup({
+      status: new FormControl('', [Validators.required]),
       surname: new FormControl('', [Validators.required]),
       ippis: new FormControl('', [Validators.required])
     });
@@ -69,14 +75,15 @@ export class LoginComponent implements OnInit {
       //var username =  loginFormValue.username;
       //var password =  loginFormValue.password + "&grant_type=password";
     //} 
-    let model = "username=" + loginFormValue.surname + "&password=" + loginFormValue.ippis + "&grant_type=" + "password";
+    let model = "username=" + loginFormValue.surname + "&password=" + loginFormValue.ippis + "&status=" + loginFormValue.status + "&grant_type=" + "password";
+    console.log(model);
     this.authenticationService.login(model)
     .subscribe(res => {
       //this.router.navigate(['/home']);      
       
       console.log(res);
       //this.router.navigate([this.returnUrl]);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/payslip/payslip/ippis']);
     },
     error => {
       console.log(error);
@@ -102,7 +109,10 @@ export class LoginComponent implements OnInit {
         this.location.back();
       })
     )
-  }*/
+  }*/  
+}
 
-  
+export interface Status {
+  id: string;
+  value: string;
 }

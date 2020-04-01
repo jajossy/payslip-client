@@ -1,0 +1,120 @@
+<section fxLayout="row" fxFlexAlign="stretch">
+    
+    <!-- <mat-card fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center"> -->
+    <mat-card fxFlex="100%" fxFlex.xs="100%">
+            <mat-progress-bar  mode="query" *ngIf="progressService.visibility | async"></mat-progress-bar>
+            <!-- <mat-card-title>Result</mat-card-title> -->
+        <mat-card-content>
+
+
+      <mat-card fxFlex="35%" fxFlex.xs="35%"> 
+        <mat-card-title>Upload monthly payslip</mat-card-title>
+        <mat-card-content>        
+
+
+        <form [formGroup]="uploadForm" autocomplete="off" novalidate 
+              (ngSubmit)="addUpload(uploadForm.value)" fxLayout="column wrap" fxLayoutAlign="center center"
+              fxLayoutGap="10px">             
+
+                  <div>                      
+                        <mat-form-field style="width: 80%">                    
+                                <mat-select placeholder="Choose Category" formControlName="CategoryId" [(ngModel)]="categoryId"  (ngModelChange)="loadSubCategory($event)" >                      
+                                <mat-option *ngFor="let cat of CategoryData" [value]="cat.CategoryId">
+                                    {{cat.Description}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="hasError('CategoryId', 'required')">Category is required</mat-error>
+                            </mat-form-field>
+                            <mat-form-field style="width: 80%">                    
+                                    <mat-select placeholder="Choose SubCategory" formControlName="SubCategoryId" [(ngModel)]="subcategoryId">                      
+                                    <mat-option *ngFor="let cat2 of SubCategoryData" [value]="cat2.SubCategoryId">
+                                        {{cat2.Description}}</mat-option>
+                                    </mat-select>                                    
+                                </mat-form-field>
+                          <mat-form-field style="width: 100%">                    
+                              <mat-select placeholder="Choose Year" formControlName="payslipyear" [(ngModel)]="YearId">                      
+                              <mat-option *ngFor="let yr of year" [value]="yr.id">{{yr.value}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="hasError('payslipyear', 'required')">payslipyear is required</mat-error>
+                          </mat-form-field>
+                          <mat-form-field style="width: 100%">                    
+                              <mat-select placeholder="Choose Month" formControlName="payslipmonth" [(ngModel)]="MonthId" >                      
+                              <mat-option *ngFor="let mth of month" [value]="mth.id">{{mth.value}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="hasError('payslipmonth', 'required')">payslipmonth is required</mat-error>
+                          </mat-form-field>                          
+                          <!--<p><button mat-raised-button color="primary" (click)="load()">load</button></p>-->
+                          <label for="file">Choose payslip to Upload</label>
+                        <input type="file" id="file" formControlName="payslipfile" (change)="handleFileInput($event.target.files)"> 
+                        <mat-form-field style="width: 70%">                    
+                            <mat-select placeholder="Payslip Per Document" formControlName="Frequency" [(ngModel)]="FrequencyId">                      
+                            <mat-option *ngFor="let freq of Frequency" [value]="freq.id">{{freq.value}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="hasError('Frequency', 'required')">payslipyear is required</mat-error>
+                        </mat-form-field>                
+                  </div>      
+              <mat-card-actions>
+                  <button mat-raised-button color="primary" *ngIf="uploadSaveButton" [disabled]="!uploadForm.valid">Upload Payslip</button>
+              </mat-card-actions>
+          </form>
+        </mat-card-content> 
+      </mat-card>
+                                        
+        <mat-card fxFlex="55%" fxFlex.xs="55%"> 
+            <mat-card-title>Uploaded payslip</mat-card-title>
+        <mat-card-content>
+            <div class="example-header" fxLayout="row">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <div class="example-container mat-elevation-z8">
+                <mat-table [dataSource]="dataSource" matSort >
+                    <ng-container matColumnDef="Category">
+                        <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="Category"> {{element.Category.Description}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SubCategory">
+                        <mat-header-cell *matHeaderCellDef> SubCategory </mat-header-cell>
+                        <mat-cell *matCellDef="let element" data-label="SubCategory"> {{element.SubCategory.Description}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PayslipYear">
+                      <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="Year"> {{element.PayslipYear}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="PayslipMonth">
+                        <mat-header-cell *matHeaderCellDef> Month </mat-header-cell>>
+                        <mat-cell *matCellDef="let element" data-label="Month"> {{element.PayslipMonth}} </mat-cell>
+                    </ng-container>                                                                
+                   
+                    <ng-container matColumnDef="delete">
+                      <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                      <mat-cell *matCellDef="let element" data-label="delete">
+                        <button mat-icon-button color="primary" (click)="delete(element.PayslipId)">
+                            <mat-icon class="mat-18">delete</mat-icon>
+                        </button>
+                      </mat-cell>
+                    </ng-container>                  
+                    
+                   
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  </mat-table>
+                  <!-- <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+                      [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+                  </mat-paginator>-->
+                  <mat-paginator
+                    #paginator="matPaginator"
+                    [pageSize]="3"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    ></mat-paginator>
+                </div>
+            
+        </mat-card-content>
+
+    </mat-card>
+    </mat-card-content>
+</mat-card>
+</section>

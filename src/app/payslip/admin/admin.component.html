@@ -14,11 +14,11 @@
                                     </mat-select>
                                 </mat-form-field>&nbsp;&nbsp; -->
 
-                                <mat-form-field style="width: 40%">                    
+                                <mat-form-field style="width: 35%">                    
                                     <input matInput type="text" placeholder="Ippis Number" [(ngModel)]="IppisNo" name="Ippis">                                    
                                 </mat-form-field>
                                 <button mat-raised-button color="primary" (click)="searchIppis()">Search Ippis</button>
-                                <mat-form-field style="width: 40%">                    
+                                <mat-form-field style="width: 35%">                    
                                     <input matInput type="text" placeholder="Name" [(ngModel)]="Name" name="name">                                    
                                 </mat-form-field>
                                 <button mat-raised-button color="primary" (click)="searchName()">Search Name</button>
@@ -42,11 +42,9 @@
                                         </ng-container>
                                 
                                         <ng-container matColumnDef="Ippis">
-                                            <mat-header-cell *matHeaderCellDef> Ippis Number </mat-header-cell>>
+                                            <mat-header-cell *matHeaderCellDef> Ippis </mat-header-cell>>
                                             <mat-cell *matCellDef="let element" data-label="Ippis"> {{element.Ippis}} </mat-cell>>
-                                        </ng-container>
-
-                                        
+                                        </ng-container>                                        
 
                                         <!-- <ng-container matColumnDef="PerScore">
                                             <mat-header-cell *matHeaderCellDef> Percentage </mat-header-cell>>

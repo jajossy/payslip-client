@@ -1,9 +1,11 @@
 export interface Staff {
 id: number;
+Ippis: string;
+Surname: string;
+Firstname: string;
+Othername: string;
 Fullname: string;
 Department: string;
 Email: string;
-Ippis: string;
-DateEntered: Date;
-Comment: string;
+Active: boolean;
 }
